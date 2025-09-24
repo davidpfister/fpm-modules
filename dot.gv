@@ -1,0 +1,610 @@
+digraph modules {
+    subgraph cluster_1 {
+        style=filled
+        color=lightgrey
+        node [style=filled,color=white]
+        label = "fpm_modules"
+        modules_packages -> modules_utilities[style="dashed"]
+        modules_packages -> modules_layouts[style="dashed"]
+        modules_utilities
+        modules_layout_circle -> modules_layout[style="dashed"]
+        modules_layout_circle -> modules_utilities[style="dashed"]
+        modules_layout_force -> modules_layout[style="dashed"]
+        modules_layout_force -> modules_utilities[style="dashed"]
+        modules_layout_graphviz -> modules_layout[style="dashed"]
+        modules_layout_graphviz -> modules_utilities[style="dashed"]
+        modules_layout_json -> modules_layout[style="dashed"]
+        modules_layout_json -> modules_utilities[style="dashed"]
+        modules_layout
+        modules_layouts -> modules_layout[style="dashed"]
+        modules_layouts -> modules_layout_mermaid[style="dashed"]
+        modules_layouts -> modules_layout_force[style="dashed"]
+        modules_layouts -> modules_layout_graphviz[style="dashed"]
+        modules_layouts -> modules_layout_json[style="dashed"]
+        modules_layouts -> modules_layout_circle[style="dashed"]
+        modules_layouts -> modules_layout_toml[style="dashed"]
+        modules_layout_mermaid -> modules_layout[style="dashed"]
+        modules_layout_mermaid -> modules_utilities[style="dashed"]
+        modules_layout_toml -> modules_layout[style="dashed"]
+        modules_layout_toml -> modules_utilities[style="dashed"]
+    }
+    subgraph cluster_2 {
+        style=filled
+        color=lightgrey
+        node [style=filled,color=white]
+        label = "fpm"
+        fpm -> fpm_strings[style="dashed"]
+        fpm -> fpm_backend[style="dashed"]
+        fpm -> fpm_command_line[style="dashed"]
+        fpm -> fpm_dependency[style="dashed"]
+        fpm -> fpm_filesystem[style="dashed"]
+        fpm -> fpm_model[style="dashed"]
+        fpm -> fpm_compiler[style="dashed"]
+        fpm -> fpm_sources[style="dashed"]
+        fpm -> fpm_targets[style="dashed"]
+        fpm -> fpm_manifest[style="dashed"]
+        fpm -> fpm_meta[style="dashed"]
+        fpm -> fpm_error[style="dashed"]
+        fpm -> fpm_toml[style="dashed"]
+        fpm -> fpm_environment[style="dashed"]
+        fpm -> fpm_settings[style="dashed"]
+        fpm_backend -> fpm_error[style="dashed"]
+        fpm_backend -> fpm_filesystem[style="dashed"]
+        fpm_backend -> fpm_model[style="dashed"]
+        fpm_backend -> fpm_strings[style="dashed"]
+        fpm_backend -> fpm_targets[style="dashed"]
+        fpm_backend -> fpm_backend_output[style="dashed"]
+        fpm_backend -> fpm_compile_commands[style="dashed"]
+        fpm_backend_console
+        fpm_backend_output -> fpm_error[style="dashed"]
+        fpm_backend_output -> fpm_filesystem[style="dashed"]
+        fpm_backend_output -> fpm_targets[style="dashed"]
+        fpm_backend_output -> fpm_backend_console[style="dashed"]
+        fpm_backend_output -> fpm_compile_commands[style="dashed"]
+        fpm_command_line -> fpm_environment[style="dashed"]
+        fpm_command_line -> fpm_strings[style="dashed"]
+        fpm_command_line -> fpm_filesystem[style="dashed"]
+        fpm_command_line -> fpm_environment[style="dashed"]
+        fpm_command_line -> fpm_error[style="dashed"]
+        fpm_command_line -> fpm_os[style="dashed"]
+        fpm_command_line -> fpm_release[style="dashed"]
+        fpm_compiler -> fpm_environment[style="dashed"]
+        fpm_compiler -> fpm_filesystem[style="dashed"]
+        fpm_compiler -> fpm_strings[style="dashed"]
+        fpm_compiler -> fpm_manifest[style="dashed"]
+        fpm_compiler -> fpm_error[style="dashed"]
+        fpm_compiler -> fpm_toml[style="dashed"]
+        fpm_compiler -> fpm_compile_commands[style="dashed"]
+        fpm_compile_commands -> fpm_toml[style="dashed"]
+        fpm_compile_commands -> fpm_strings[style="dashed"]
+        fpm_compile_commands -> fpm_error[style="dashed"]
+        fpm_compile_commands -> fpm_os[style="dashed"]
+        fpm_compile_commands -> fpm_environment[style="dashed"]
+        fpm_environment -> fpm_error[style="dashed"]
+        fpm_filesystem -> fpm_environment[style="dashed"]
+        fpm_filesystem -> fpm_environment[style="dashed"]
+        fpm_filesystem -> fpm_strings[style="dashed"]
+        fpm_filesystem -> fpm_error[style="dashed"]
+        fpm_meta -> fpm_compiler[style="dashed"]
+        fpm_meta -> fpm_manifest[style="dashed"]
+        fpm_meta -> fpm_model[style="dashed"]
+        fpm_meta -> fpm_command_line[style="dashed"]
+        fpm_meta -> fpm_error[style="dashed"]
+        fpm_meta -> fpm_meta_base[style="dashed"]
+        fpm_meta -> fpm_meta_openmp[style="dashed"]
+        fpm_meta -> fpm_meta_stdlib[style="dashed"]
+        fpm_meta -> fpm_meta_minpack[style="dashed"]
+        fpm_meta -> fpm_meta_mpi[style="dashed"]
+        fpm_meta -> fpm_meta_hdf5[style="dashed"]
+        fpm_meta -> fpm_meta_netcdf[style="dashed"]
+        fpm_meta -> fpm_meta_blas[style="dashed"]
+        fpm_meta -> fpm_manifest_metapackages[style="dashed"]
+        fpm_model -> fpm_compiler[style="dashed"]
+        fpm_model -> fpm_dependency[style="dashed"]
+        fpm_model -> fpm_strings[style="dashed"]
+        fpm_model -> fpm_toml[style="dashed"]
+        fpm_model -> fpm_error[style="dashed"]
+        fpm_model -> fpm_environment[style="dashed"]
+        fpm_model -> fpm_manifest_preprocess[style="dashed"]
+        fpm_os -> fpm_filesystem[style="dashed"]
+        fpm_os -> fpm_environment[style="dashed"]
+        fpm_os -> fpm_error[style="dashed"]
+        fpm_pkg_config -> fpm_strings[style="dashed"]
+        fpm_pkg_config -> fpm_error[style="dashed"]
+        fpm_pkg_config -> fpm_filesystem[style="dashed"]
+        fpm_pkg_config -> fpm_environment[style="dashed"]
+        fpm_settings -> fpm_filesystem[style="dashed"]
+        fpm_settings -> fpm_environment[style="dashed"]
+        fpm_settings -> fpm_error[style="dashed"]
+        fpm_settings -> fpm_toml[style="dashed"]
+        fpm_settings -> fpm_os[style="dashed"]
+        fpm_sources -> fpm_error[style="dashed"]
+        fpm_sources -> fpm_model[style="dashed"]
+        fpm_sources -> fpm_filesystem[style="dashed"]
+        fpm_sources -> fpm_environment[style="dashed"]
+        fpm_sources -> fpm_strings[style="dashed"]
+        fpm_sources -> fpm_source_parsing[style="dashed"]
+        fpm_sources -> fpm_manifest_executable[style="dashed"]
+        fpm_source_parsing -> fpm_error[style="dashed"]
+        fpm_source_parsing -> fpm_strings[style="dashed"]
+        fpm_source_parsing -> fpm_model[style="dashed"]
+        fpm_source_parsing -> fpm_filesystem[style="dashed"]
+        fpm_strings
+        fpm_targets -> fpm_error[style="dashed"]
+        fpm_targets -> fpm_model[style="dashed"]
+        fpm_targets -> fpm_compiler[style="dashed"]
+        fpm_targets -> fpm_environment[style="dashed"]
+        fpm_targets -> fpm_filesystem[style="dashed"]
+        fpm_targets -> fpm_strings[style="dashed"]
+        fpm_targets -> fpm_compiler[style="dashed"]
+        fpm_targets -> fpm_sources[style="dashed"]
+        fpm_targets -> fpm_manifest_library[style="dashed"]
+        fpm_targets -> fpm_manifest_preprocess[style="dashed"]
+        fpm_dependency -> fpm_environment[style="dashed"]
+        fpm_dependency -> fpm_error[style="dashed"]
+        fpm_dependency -> fpm_filesystem[style="dashed"]
+        fpm_dependency -> fpm_git[style="dashed"]
+        fpm_dependency -> fpm_manifest[style="dashed"]
+        fpm_dependency -> fpm_manifest_dependency[style="dashed"]
+        fpm_dependency -> fpm_manifest_preprocess[style="dashed"]
+        fpm_dependency -> fpm_strings[style="dashed"]
+        fpm_dependency -> fpm_toml[style="dashed"]
+        fpm_dependency -> fpm_versioning[style="dashed"]
+        fpm_dependency -> fpm_settings[style="dashed"]
+        fpm_dependency -> fpm_downloader[style="dashed"]
+        fpm_downloader -> fpm_error[style="dashed"]
+        fpm_downloader -> fpm_filesystem[style="dashed"]
+        fpm_downloader -> fpm_versioning[style="dashed"]
+        fpm_downloader -> fpm_strings[style="dashed"]
+        fpm_error -> fpm_strings[style="dashed"]
+        fpm_release -> fpm_versioning[style="dashed"]
+        fpm_release -> fpm_error[style="dashed"]
+        fpm_git -> fpm_error[style="dashed"]
+        fpm_git -> fpm_filesystem[style="dashed"]
+        fpm_git -> fpm_toml[style="dashed"]
+        fpm_installer -> fpm_environment[style="dashed"]
+        fpm_installer -> fpm_error[style="dashed"]
+        fpm_installer -> fpm_targets[style="dashed"]
+        fpm_installer -> fpm_filesystem[style="dashed"]
+        fpm_manifest -> fpm_manifest_example[style="dashed"]
+        fpm_manifest -> fpm_manifest_executable[style="dashed"]
+        fpm_manifest -> fpm_manifest_dependency[style="dashed"]
+        fpm_manifest -> fpm_manifest_library[style="dashed"]
+        fpm_manifest -> fpm_manifest_preprocess[style="dashed"]
+        fpm_manifest -> fpm_manifest_package[style="dashed"]
+        fpm_manifest -> fpm_error[style="dashed"]
+        fpm_manifest -> fpm_toml[style="dashed"]
+        fpm_manifest -> fpm_manifest_test[style="dashed"]
+        fpm_manifest -> fpm_filesystem[style="dashed"]
+        fpm_manifest -> fpm_environment[style="dashed"]
+        fpm_manifest -> fpm_strings[style="dashed"]
+        fpm_toml -> fpm_error[style="dashed"]
+        fpm_toml -> fpm_strings[style="dashed"]
+        fpm_versioning -> fpm_error[style="dashed"]
+        fpm_versioning -> fpm_strings[style="dashed"]
+        fpm_cmd_export -> fpm_command_line[style="dashed"]
+        fpm_cmd_export -> fpm_dependency[style="dashed"]
+        fpm_cmd_export -> fpm_error[style="dashed"]
+        fpm_cmd_export -> fpm_filesystem[style="dashed"]
+        fpm_cmd_export -> fpm_manifest[style="dashed"]
+        fpm_cmd_export -> fpm_toml[style="dashed"]
+        fpm_cmd_export -> fpm_model[style="dashed"]
+        fpm_cmd_export -> fpm[style="dashed"]
+        fpm_cmd_install -> fpm[style="dashed"]
+        fpm_cmd_install -> fpm_backend[style="dashed"]
+        fpm_cmd_install -> fpm_command_line[style="dashed"]
+        fpm_cmd_install -> fpm_error[style="dashed"]
+        fpm_cmd_install -> fpm_filesystem[style="dashed"]
+        fpm_cmd_install -> fpm_installer[style="dashed"]
+        fpm_cmd_install -> fpm_manifest[style="dashed"]
+        fpm_cmd_install -> fpm_model[style="dashed"]
+        fpm_cmd_install -> fpm_targets[style="dashed"]
+        fpm_cmd_install -> fpm_strings[style="dashed"]
+        fpm_cmd_new -> fpm_command_line[style="dashed"]
+        fpm_cmd_new -> fpm_environment[style="dashed"]
+        fpm_cmd_new -> fpm_filesystem[style="dashed"]
+        fpm_cmd_new -> fpm_filesystem[style="dashed"]
+        fpm_cmd_new -> fpm_strings[style="dashed"]
+        fpm_cmd_new -> fpm_error[style="dashed"]
+        fpm_cmd_new -> fpm_filesystem[style="dashed"]
+        fpm_cmd_new -> fpm_toml[style="dashed"]
+        fpm_cmd_new -> fpm_manifest_package[style="dashed"]
+        fpm_cmd_new -> fpm_error[style="dashed"]
+        fpm_cmd_publish -> fpm_command_line[style="dashed"]
+        fpm_cmd_publish -> fpm_manifest[style="dashed"]
+        fpm_cmd_publish -> fpm_model[style="dashed"]
+        fpm_cmd_publish -> fpm_error[style="dashed"]
+        fpm_cmd_publish -> fpm_versioning[style="dashed"]
+        fpm_cmd_publish -> fpm_filesystem[style="dashed"]
+        fpm_cmd_publish -> fpm_git[style="dashed"]
+        fpm_cmd_publish -> fpm_downloader[style="dashed"]
+        fpm_cmd_publish -> fpm_strings[style="dashed"]
+        fpm_cmd_publish -> fpm_settings[style="dashed"]
+        fpm_cmd_publish -> fpm[style="dashed"]
+        fpm_cmd_update -> fpm_command_line[style="dashed"]
+        fpm_cmd_update -> fpm_dependency[style="dashed"]
+        fpm_cmd_update -> fpm_error[style="dashed"]
+        fpm_cmd_update -> fpm_filesystem[style="dashed"]
+        fpm_cmd_update -> fpm_manifest[style="dashed"]
+        fpm_cmd_update -> fpm_toml[style="dashed"]
+        fpm_manifest_build -> fpm_error[style="dashed"]
+        fpm_manifest_build -> fpm_strings[style="dashed"]
+        fpm_manifest_build -> fpm_toml[style="dashed"]
+        fpm_manifest_dependency -> fpm_error[style="dashed"]
+        fpm_manifest_dependency -> fpm_git[style="dashed"]
+        fpm_manifest_dependency -> fpm_toml[style="dashed"]
+        fpm_manifest_dependency -> fpm_filesystem[style="dashed"]
+        fpm_manifest_dependency -> fpm_environment[style="dashed"]
+        fpm_manifest_dependency -> fpm_manifest_metapackages[style="dashed"]
+        fpm_manifest_dependency -> fpm_versioning[style="dashed"]
+        fpm_manifest_dependency -> fpm_strings[style="dashed"]
+        fpm_manifest_dependency -> fpm_manifest_preprocess[style="dashed"]
+        fpm_manifest_example -> fpm_manifest_dependency[style="dashed"]
+        fpm_manifest_example -> fpm_manifest_executable[style="dashed"]
+        fpm_manifest_example -> fpm_error[style="dashed"]
+        fpm_manifest_example -> fpm_toml[style="dashed"]
+        fpm_manifest_executable -> fpm_manifest_dependency[style="dashed"]
+        fpm_manifest_executable -> fpm_error[style="dashed"]
+        fpm_manifest_executable -> fpm_strings[style="dashed"]
+        fpm_manifest_executable -> fpm_toml[style="dashed"]
+        fpm_manifest_fortran -> fpm_error[style="dashed"]
+        fpm_manifest_fortran -> fpm_toml[style="dashed"]
+        fpm_manifest_install -> fpm_error[style="dashed"]
+        fpm_manifest_install -> fpm_toml[style="dashed"]
+        fpm_manifest_library -> fpm_error[style="dashed"]
+        fpm_manifest_library -> fpm_strings[style="dashed"]
+        fpm_manifest_library -> fpm_toml[style="dashed"]
+        fpm_manifest_metapackages -> fpm_error[style="dashed"]
+        fpm_manifest_metapackages -> fpm_toml[style="dashed"]
+        fpm_manifest_metapackages -> fpm_environment[style="dashed"]
+        fpm_manifest_package -> fpm_manifest_build[style="dashed"]
+        fpm_manifest_package -> fpm_manifest_dependency[style="dashed"]
+        fpm_manifest_package -> fpm_manifest_profile[style="dashed"]
+        fpm_manifest_package -> fpm_manifest_example[style="dashed"]
+        fpm_manifest_package -> fpm_manifest_executable[style="dashed"]
+        fpm_manifest_package -> fpm_manifest_fortran[style="dashed"]
+        fpm_manifest_package -> fpm_manifest_library[style="dashed"]
+        fpm_manifest_package -> fpm_manifest_install[style="dashed"]
+        fpm_manifest_package -> fpm_manifest_test[style="dashed"]
+        fpm_manifest_package -> fpm_manifest_preprocess[style="dashed"]
+        fpm_manifest_package -> fpm_manifest_metapackages[style="dashed"]
+        fpm_manifest_package -> fpm_filesystem[style="dashed"]
+        fpm_manifest_package -> fpm_error[style="dashed"]
+        fpm_manifest_package -> fpm_toml[style="dashed"]
+        fpm_manifest_package -> fpm_versioning[style="dashed"]
+        fpm_manifest_preprocess -> fpm_error[style="dashed"]
+        fpm_manifest_preprocess -> fpm_strings[style="dashed"]
+        fpm_manifest_preprocess -> fpm_toml[style="dashed"]
+        fpm_manifest_profile -> fpm_error[style="dashed"]
+        fpm_manifest_profile -> fpm_toml[style="dashed"]
+        fpm_manifest_profile -> fpm_strings[style="dashed"]
+        fpm_manifest_profile -> fpm_environment[style="dashed"]
+        fpm_manifest_profile -> fpm_filesystem[style="dashed"]
+        fpm_manifest_test -> fpm_manifest_dependency[style="dashed"]
+        fpm_manifest_test -> fpm_manifest_executable[style="dashed"]
+        fpm_manifest_test -> fpm_error[style="dashed"]
+        fpm_manifest_test -> fpm_toml[style="dashed"]
+        fpm_meta_base -> fpm_error[style="dashed"]
+        fpm_meta_base -> fpm_versioning[style="dashed"]
+        fpm_meta_base -> fpm_model[style="dashed"]
+        fpm_meta_base -> fpm_command_line[style="dashed"]
+        fpm_meta_base -> fpm_manifest_dependency[style="dashed"]
+        fpm_meta_base -> fpm_manifest_preprocess[style="dashed"]
+        fpm_meta_base -> fpm_manifest[style="dashed"]
+        fpm_meta_base -> fpm_strings[style="dashed"]
+        fpm_meta_base -> fpm_compiler[style="dashed"]
+        fpm_meta_blas -> fpm_compiler[style="dashed"]
+        fpm_meta_blas -> fpm_environment[style="dashed"]
+        fpm_meta_blas -> fpm_meta_base[style="dashed"]
+        fpm_meta_blas -> fpm_meta_util[style="dashed"]
+        fpm_meta_blas -> fpm_pkg_config[style="dashed"]
+        fpm_meta_blas -> fpm_manifest_metapackages[style="dashed"]
+        fpm_meta_blas -> fpm_strings[style="dashed"]
+        fpm_meta_blas -> fpm_error[style="dashed"]
+        fpm_meta_hdf5 -> fpm_compiler[style="dashed"]
+        fpm_meta_hdf5 -> fpm_strings[style="dashed"]
+        fpm_meta_hdf5 -> fpm_filesystem[style="dashed"]
+        fpm_meta_hdf5 -> fpm_pkg_config[style="dashed"]
+        fpm_meta_hdf5 -> fpm_meta_base[style="dashed"]
+        fpm_meta_hdf5 -> fpm_meta_util[style="dashed"]
+        fpm_meta_hdf5 -> fpm_manifest_metapackages[style="dashed"]
+        fpm_meta_hdf5 -> fpm_error[style="dashed"]
+        fpm_meta_minpack -> fpm_compiler[style="dashed"]
+        fpm_meta_minpack -> fpm_meta_base[style="dashed"]
+        fpm_meta_minpack -> fpm_error[style="dashed"]
+        fpm_meta_minpack -> fpm_git[style="dashed"]
+        fpm_meta_minpack -> fpm_manifest_metapackages[style="dashed"]
+        fpm_meta_mpi -> fpm_compiler[style="dashed"]
+        fpm_meta_mpi -> fpm_filesystem[style="dashed"]
+        fpm_meta_mpi -> fpm_os[style="dashed"]
+        fpm_meta_mpi -> fpm_error[style="dashed"]
+        fpm_meta_mpi -> fpm_versioning[style="dashed"]
+        fpm_meta_mpi -> fpm_strings[style="dashed"]
+        fpm_meta_mpi -> fpm_environment[style="dashed"]
+        fpm_meta_mpi -> fpm_meta_base[style="dashed"]
+        fpm_meta_mpi -> fpm_manifest_metapackages[style="dashed"]
+        fpm_meta_mpi -> fpm_pkg_config[style="dashed"]
+        fpm_meta_netcdf -> fpm_compiler[style="dashed"]
+        fpm_meta_netcdf -> fpm_meta_base[style="dashed"]
+        fpm_meta_netcdf -> fpm_meta_util[style="dashed"]
+        fpm_meta_netcdf -> fpm_pkg_config[style="dashed"]
+        fpm_meta_netcdf -> fpm_strings[style="dashed"]
+        fpm_meta_netcdf -> fpm_error[style="dashed"]
+        fpm_meta_netcdf -> fpm_manifest_metapackages[style="dashed"]
+        fpm_meta_openmp -> fpm_compiler[style="dashed"]
+        fpm_meta_openmp -> fpm_strings[style="dashed"]
+        fpm_meta_openmp -> fpm_meta_base[style="dashed"]
+        fpm_meta_openmp -> fpm_error[style="dashed"]
+        fpm_meta_openmp -> fpm_manifest_metapackages[style="dashed"]
+        fpm_meta_stdlib -> fpm_compiler[style="dashed"]
+        fpm_meta_stdlib -> fpm_error[style="dashed"]
+        fpm_meta_stdlib -> fpm_meta_base[style="dashed"]
+        fpm_meta_stdlib -> fpm_git[style="dashed"]
+        fpm_meta_stdlib -> fpm_manifest_metapackages[style="dashed"]
+        fpm_meta_stdlib -> fpm_strings[style="dashed"]
+        fpm_meta_util -> fpm_meta_base[style="dashed"]
+        fpm_meta_util -> fpm_filesystem[style="dashed"]
+        fpm_meta_util -> fpm_strings[style="dashed"]
+        fpm_meta_util -> fpm_error[style="dashed"]
+        fpm_meta_util -> fpm_versioning[style="dashed"]
+        fpm_meta_util -> fpm_pkg_config[style="dashed"]
+    }
+    subgraph cluster_3 {
+        style=filled
+        color=lightgrey
+        node [style=filled,color=white]
+        label = "toml_f"
+        tomlf -> tomlf_build[style="dashed"]
+        tomlf -> tomlf_datetime[style="dashed"]
+        tomlf -> tomlf_de[style="dashed"]
+        tomlf -> tomlf_error[style="dashed"]
+        tomlf -> tomlf_ser[style="dashed"]
+        tomlf -> tomlf_terminal[style="dashed"]
+        tomlf -> tomlf_type[style="dashed"]
+        tomlf -> tomlf_utils_sort[style="dashed"]
+        tomlf -> tomlf_version[style="dashed"]
+        tomlf_all -> tomlf_build[style="dashed"]
+        tomlf_all -> tomlf_constants[style="dashed"]
+        tomlf_all -> tomlf_datetime[style="dashed"]
+        tomlf_all -> tomlf_de[style="dashed"]
+        tomlf_all -> tomlf_error[style="dashed"]
+        tomlf_all -> tomlf_ser[style="dashed"]
+        tomlf_all -> tomlf_structure[style="dashed"]
+        tomlf_all -> tomlf_type[style="dashed"]
+        tomlf_all -> tomlf_utils[style="dashed"]
+        tomlf_all -> tomlf_version[style="dashed"]
+        tomlf_build -> tomlf_build_array[style="dashed"]
+        tomlf_build -> tomlf_build_keyval[style="dashed"]
+        tomlf_build -> tomlf_build_merge[style="dashed"]
+        tomlf_build -> tomlf_build_path[style="dashed"]
+        tomlf_build -> tomlf_build_table[style="dashed"]
+        tomlf_constants
+        tomlf_datetime -> tomlf_constants[style="dashed"]
+        tomlf_de -> tomlf_constants[style="dashed"]
+        tomlf_de -> tomlf_de_context[style="dashed"]
+        tomlf_de -> tomlf_de_lexer[style="dashed"]
+        tomlf_de -> tomlf_de_parser[style="dashed"]
+        tomlf_de -> tomlf_diagnostic[style="dashed"]
+        tomlf_de -> tomlf_error[style="dashed"]
+        tomlf_de -> tomlf_type[style="dashed"]
+        tomlf_diagnostic -> tomlf_terminal[style="dashed"]
+        tomlf_error -> tomlf_constants[style="dashed"]
+        tomlf_ser -> tomlf_constants[style="dashed"]
+        tomlf_ser -> tomlf_datetime[style="dashed"]
+        tomlf_ser -> tomlf_error[style="dashed"]
+        tomlf_ser -> tomlf_type[style="dashed"]
+        tomlf_ser -> tomlf_utils[style="dashed"]
+        tomlf_structure -> tomlf_structure_list[style="dashed"]
+        tomlf_structure -> tomlf_structure_map[style="dashed"]
+        tomlf_structure -> tomlf_structure_array_list[style="dashed"]
+        tomlf_structure -> tomlf_structure_ordered_map[style="dashed"]
+        tomlf_terminal -> tomlf_utils[style="dashed"]
+        tomlf_type -> tomlf_constants[style="dashed"]
+        tomlf_type -> tomlf_error[style="dashed"]
+        tomlf_type -> tomlf_type_array[style="dashed"]
+        tomlf_type -> tomlf_type_keyval[style="dashed"]
+        tomlf_type -> tomlf_type_table[style="dashed"]
+        tomlf_type -> tomlf_type_value[style="dashed"]
+        tomlf_utils -> tomlf_constants[style="dashed"]
+        tomlf_utils -> tomlf_datetime[style="dashed"]
+        tomlf_utils -> tomlf_utils_io[style="dashed"]
+        tomlf_version
+        tomlf_build_array -> tomlf_build_keyval[style="dashed"]
+        tomlf_build_array -> tomlf_constants[style="dashed"]
+        tomlf_build_array -> tomlf_datetime[style="dashed"]
+        tomlf_build_array -> tomlf_error[style="dashed"]
+        tomlf_build_array -> tomlf_type[style="dashed"]
+        tomlf_build_keyval -> tomlf_constants[style="dashed"]
+        tomlf_build_keyval -> tomlf_datetime[style="dashed"]
+        tomlf_build_keyval -> tomlf_error[style="dashed"]
+        tomlf_build_keyval -> tomlf_type[style="dashed"]
+        tomlf_build_keyval -> tomlf_utils[style="dashed"]
+        tomlf_build_merge -> tomlf_constants[style="dashed"]
+        tomlf_build_merge -> tomlf_type[style="dashed"]
+        tomlf_build_path -> tomlf_build_table[style="dashed"]
+        tomlf_build_path -> tomlf_constants[style="dashed"]
+        tomlf_build_path -> tomlf_datetime[style="dashed"]
+        tomlf_build_path -> tomlf_error[style="dashed"]
+        tomlf_build_path -> tomlf_type[style="dashed"]
+        tomlf_build_table -> tomlf_build_keyval[style="dashed"]
+        tomlf_build_table -> tomlf_constants[style="dashed"]
+        tomlf_build_table -> tomlf_datetime[style="dashed"]
+        tomlf_build_table -> tomlf_error[style="dashed"]
+        tomlf_build_table -> tomlf_type[style="dashed"]
+        tomlf_de_abc -> tomlf_constants[style="dashed"]
+        tomlf_de_abc -> tomlf_datetime[style="dashed"]
+        tomlf_de_abc -> tomlf_de_token[style="dashed"]
+        tomlf_de_context -> tomlf_constants[style="dashed"]
+        tomlf_de_context -> tomlf_de_token[style="dashed"]
+        tomlf_de_context -> tomlf_diagnostic[style="dashed"]
+        tomlf_de_context -> tomlf_terminal[style="dashed"]
+        tomlf_de_lexer -> tomlf_constants[style="dashed"]
+        tomlf_de_lexer -> tomlf_datetime[style="dashed"]
+        tomlf_de_lexer -> tomlf_de_abc[style="dashed"]
+        tomlf_de_lexer -> tomlf_de_context[style="dashed"]
+        tomlf_de_lexer -> tomlf_de_token[style="dashed"]
+        tomlf_de_lexer -> tomlf_error[style="dashed"]
+        tomlf_de_lexer -> tomlf_utils[style="dashed"]
+        tomlf_de_parser -> tomlf_constants[style="dashed"]
+        tomlf_de_parser -> tomlf_datetime[style="dashed"]
+        tomlf_de_parser -> tomlf_de_context[style="dashed"]
+        tomlf_de_parser -> tomlf_de_abc[style="dashed"]
+        tomlf_de_parser -> tomlf_de_token[style="dashed"]
+        tomlf_de_parser -> tomlf_diagnostic[style="dashed"]
+        tomlf_de_parser -> tomlf_terminal[style="dashed"]
+        tomlf_de_parser -> tomlf_error[style="dashed"]
+        tomlf_de_parser -> tomlf_type[style="dashed"]
+        tomlf_de_token
+        tomlf_structure_array_list -> tomlf_constants[style="dashed"]
+        tomlf_structure_array_list -> tomlf_structure_list[style="dashed"]
+        tomlf_structure_array_list -> tomlf_structure_node[style="dashed"]
+        tomlf_structure_array_list -> tomlf_type_value[style="dashed"]
+        tomlf_structure_list -> tomlf_constants[style="dashed"]
+        tomlf_structure_list -> tomlf_type_value[style="dashed"]
+        tomlf_structure_map -> tomlf_constants[style="dashed"]
+        tomlf_structure_map -> tomlf_type_value[style="dashed"]
+        tomlf_structure_node -> tomlf_type_value[style="dashed"]
+        tomlf_structure_ordered_map -> tomlf_constants[style="dashed"]
+        tomlf_structure_ordered_map -> tomlf_structure_map[style="dashed"]
+        tomlf_structure_ordered_map -> tomlf_structure_node[style="dashed"]
+        tomlf_structure_ordered_map -> tomlf_type_value[style="dashed"]
+        tomlf_type_array -> tomlf_error[style="dashed"]
+        tomlf_type_array -> tomlf_type_value[style="dashed"]
+        tomlf_type_array -> tomlf_structure[style="dashed"]
+        tomlf_type_keyval -> tomlf_constants[style="dashed"]
+        tomlf_type_keyval -> tomlf_datetime[style="dashed"]
+        tomlf_type_keyval -> tomlf_type_value[style="dashed"]
+        tomlf_type_table -> tomlf_constants[style="dashed"]
+        tomlf_type_table -> tomlf_error[style="dashed"]
+        tomlf_type_table -> tomlf_type_value[style="dashed"]
+        tomlf_type_table -> tomlf_structure[style="dashed"]
+        tomlf_type_value -> tomlf_constants[style="dashed"]
+        tomlf_type_value -> tomlf_utils[style="dashed"]
+        tomlf_utils_io -> tomlf_constants[style="dashed"]
+        tomlf_utils_sort -> tomlf_type_value[style="dashed"]
+    }
+    subgraph cluster_4 {
+        style=filled
+        color=lightgrey
+        node [style=filled,color=white]
+        label = "M_CLI2"
+        m_cli2
+    }
+    subgraph cluster_5 {
+        style=filled
+        color=lightgrey
+        node [style=filled,color=white]
+        label = "fortran_regex"
+        regex_module
+    }
+    subgraph cluster_6 {
+        style=filled
+        color=lightgrey
+        node [style=filled,color=white]
+        label = "jonquil"
+        jonquil -> jonquil_version[style="dashed"]
+        jonquil -> jonquil_parser[style="dashed"]
+        jonquil -> jonquil_ser[style="dashed"]
+        jonquil_lexer
+        jonquil_parser -> jonquil_lexer[style="dashed"]
+        jonquil_ser
+        jonquil_version
+    }
+    subgraph cluster_7 {
+        style=filled
+        color=lightgrey
+        node [style=filled,color=white]
+        label = "fortran_shlex"
+        shlex_module
+    }
+    modules_packages->fpm_strings
+    modules_packages->fpm_command_line
+    modules_packages->fpm_dependency
+    modules_packages->fpm_error
+    modules_packages->fpm_filesystem
+    modules_packages->fpm_manifest
+    modules_packages->fpm_model
+    modules_packages->fpm
+    modules_utilities->fpm_strings
+    modules_utilities->fpm_error
+    modules_layout_circle->fpm_filesystem
+    modules_layout_circle->fpm_model
+    modules_layout_circle->fpm_strings
+    modules_layout_circle->fpm_error
+    modules_layout_circle->fpm_filesystem
+    modules_layout_force->fpm_model
+    modules_layout_force->fpm_strings
+    modules_layout_force->fpm_error
+    modules_layout_graphviz->fpm_model
+    modules_layout_graphviz->fpm_strings
+    modules_layout_graphviz->fpm_error
+    modules_layout_json->fpm_model
+    modules_layout_json->fpm_strings
+    modules_layout_json->fpm_error
+    modules_layout->fpm_model
+    modules_layout->fpm_strings
+    modules_layout_mermaid->fpm_model
+    modules_layout_mermaid->fpm_strings
+    modules_layout_mermaid->fpm_error
+    modules_layout_toml->fpm_model
+    modules_layout_toml->fpm_strings
+    modules_layout_toml->fpm_error
+    fpm_command_line->m_cli2
+    fpm_command_line->m_cli2
+    fpm_compiler->tomlf
+    fpm_compiler->shlex_module
+    fpm_compile_commands->tomlf
+    fpm_compile_commands->jonquil
+    fpm_compile_commands->shlex_module
+    fpm_meta->shlex_module
+    fpm_meta->regex_module
+    fpm_model->tomlf
+    fpm_pkg_config->shlex_module
+    fpm_settings->tomlf
+    fpm_dependency->tomlf
+    fpm_dependency->jonquil
+    fpm_downloader->jonquil
+    fpm_git->tomlf
+    fpm_manifest->tomlf
+    fpm_toml->tomlf
+    fpm_toml->tomlf_de_parser
+    fpm_toml->jonquil
+    fpm_versioning->regex_module
+    fpm_cmd_new->tomlf
+    fpm_cmd_new->tomlf
+    fpm_manifest_build->tomlf
+    fpm_manifest_dependency->tomlf
+    fpm_manifest_example->tomlf
+    fpm_manifest_executable->tomlf
+    fpm_manifest_fortran->tomlf
+    fpm_manifest_install->tomlf
+    fpm_manifest_library->tomlf
+    fpm_manifest_metapackages->tomlf
+    fpm_manifest_package->tomlf
+    fpm_manifest_preprocess->tomlf
+    fpm_manifest_profile->tomlf
+    fpm_manifest_test->tomlf
+    fpm_meta_mpi->shlex_module
+    jonquil->tomlf
+    jonquil->tomlf_type
+    jonquil->tomlf_version
+    jonquil_lexer->tomlf_constants
+    jonquil_lexer->tomlf_datetime
+    jonquil_lexer->tomlf_de_abc
+    jonquil_lexer->tomlf_de_token
+    jonquil_lexer->tomlf_error
+    jonquil_lexer->tomlf_utils
+    jonquil_parser->tomlf_constants
+    jonquil_parser->tomlf_datetime
+    jonquil_parser->tomlf_de_context
+    jonquil_parser->tomlf_de_parser
+    jonquil_parser->tomlf_diagnostic
+    jonquil_parser->tomlf_build
+    jonquil_parser->tomlf_error
+    jonquil_parser->tomlf_type
+    jonquil_ser->tomlf_constants
+    jonquil_ser->tomlf_datetime
+    jonquil_ser->tomlf_type
+    jonquil_ser->tomlf_error
+    jonquil_ser->tomlf_utils
+}

@@ -12,12 +12,13 @@ module modules_layout
     end type
 
     abstract interface
-        subroutine generate_x(this, model, filepath, exclude)
+        subroutine generate_x(this, model, filepath, extension, exclude)
             import
             implicit none
             class(layout), intent(in)               :: this
             class(fpm_model_t), intent(inout)       :: model
             character(*), intent(in)                :: filepath
+            character(*), intent(in)                :: extension
             type(string_t), optional, intent(in)    :: exclude(:)
         end subroutine
     end interface
