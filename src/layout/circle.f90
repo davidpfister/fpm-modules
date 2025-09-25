@@ -92,13 +92,36 @@ module modules_layout_circle
                                     model%packages(i)%sources(j)%modules_provided(k)%s, s
                             end do
                         end do
-                        inquire(unit=unit, pos=s); read(unit,'(A)', advance='no', pos=s-1)
+                        if (unit == stdout) then
+                            write(unit,'(A)', advance='no') char(8)
+                        else
+                            inquire(unit=unit, pos=s); read(unit,'(A)', advance='no', pos=s-1)
+                        end if
                         write(unit,'(A)', advance='no') ']},'
                     end if
+                else
+                    write(unit,'("{""name"": """, A ,""", ""children"": [")', advance='no') model%packages(i)%name
+                    do j = 1, size(model%packages(i)%sources)
+                        inquire(file=model%packages(i)%sources(j)%file_name, size=s)
+                        do k = 1, size(model%packages(i)%sources(j)%modules_provided)
+                            write(unit,'("{""name"": """, A ,""", ""value"": """, i0 ,"""},")', advance='no') &
+                                model%packages(i)%sources(j)%modules_provided(k)%s, s
+                        end do
+                    end do
+                    if (unit == stdout) then
+                        write(unit,'(A)', advance='no') char(8)
+                    else
+                        inquire(unit=unit, pos=s); read(unit,'(A)', advance='no', pos=s-1)
+                    end if
+                    write(unit,'(A)', advance='no') ']},'
                 end if
                 
             end do
-            inquire(unit=unit, pos=s); read(unit,'(A)', advance='no', pos=s-1)
+            if (unit == stdout) then
+                write(unit,'(A)', advance='no') char(8)
+            else
+                inquire(unit=unit, pos=s); read(unit,'(A)', advance='no', pos=s-1)
+            end if
             write(unit,'(A)', advance='no') ']'
             write(unit,'(A)') "}';"
         end subroutine
