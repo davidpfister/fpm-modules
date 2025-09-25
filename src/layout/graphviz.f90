@@ -76,8 +76,7 @@ module modules_layout_graphviz
         
         type(error_t), allocatable :: error
         character(1) :: svg
-        integer :: i, j, k, l, n, unit, sunit
-        integer :: iostat
+        integer :: i, iostat, n, unit, sunit
         character(100) :: iomsg
         logical :: exists, is_added
 
@@ -177,6 +176,7 @@ module modules_layout_graphviz
 
         subroutine write_dot()
             !private
+            integer :: i, j, k, l
             type(string_t), allocatable :: excludes_mods(:)
             type(self_mods), allocatable :: smods(:)
 

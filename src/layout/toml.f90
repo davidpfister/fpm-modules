@@ -30,7 +30,7 @@ module modules_layout_toml
             call model%dump(stdout, error, json=.false.)
         else
             if (extension /= '.toml') then
-                error = error_t('Error: Unsupported file extension '//extension//' for circle layout. Supported extensions is .toml')
+                error = error_t('Error: Unsupported file extension '//extension//' for toml layout. Supported extensions is .toml')
                 call handle_error(error)
                 return
             end if

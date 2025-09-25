@@ -30,7 +30,7 @@ module modules_layout_json
             call model%dump(stdout, error, json=.true.)
         else
             if (extension /= '.json') then
-                error = error_t('Error: Unsupported file extension '//extension//' for circle layout. Supported extensions is .json')
+                error = error_t('Error: Unsupported file extension '//extension//' for json layout. Supported extensions is .json')
                 call handle_error(error)
                 return
             end if

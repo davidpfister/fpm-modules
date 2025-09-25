@@ -100,7 +100,7 @@ module modules_packages
         case('toml')
             allocate(this%l, source = toml())
         case default
-            call fpm_stop(1,'Unknown chart option. Supported values are "mermaid", "force", "dot", "fdp", "sfdp", "neato", "circle" and "json"')
+            call fpm_stop(1,'Unknown layout option. Supported values are "mermaid", "force", "dot", "fdp", "sfdp", "neato", "circle" and "json"')
         end select
     end subroutine
 

@@ -35,7 +35,6 @@ module modules_layout_mermaid
 
         select case (extension)
         case ('.html', '.htm')
-            call write_mermaid()
             write(unit,'(*(A,/))')              &
             '<!DOCTYPE html>'               ,   &
             '<html lang="en">'              ,   &
