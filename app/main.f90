@@ -6,14 +6,6 @@
 #    define MACRO_STRINGIFY(A) #A
 # endif
 #include <app.inc>
-!-K (default dot)	    -o (default *.dot)
-!                       *.json (dump), *.toml (dump), *.dot, *.gv, *.svg, *.jpg, *.png, *.html
-!dot, fdp, sfdp, neato	*.dot, *.svg, *.jpg, *.png, *.html
-!circle	                *.json, *.html
-!force	                *.json, *.html
-!mermaid	            *.mmd, *.html
-!json	                *.json
-!toml	                *.toml
 console(main)
     main(args)
         use fpm_filesystem, only : join_path
@@ -105,19 +97,19 @@ console(main)
             i = i + 1
         end do
 
-        call chdir(dir)
-
-        tomlfile = join_path('', 'fpm.toml')
-        call new(p, tomlfile, layout)
-
         if (allocated(output)) then
             pos = index(output, '.', back=.true.)
-            filepath = output(:pos-1)
+            filepath = fullpath(output(:pos-1))
             extension = output(pos:)
         else
             filepath = ''
             extension = ''
         end if
+
+        call chdir(dir)
+
+        tomlfile = join_path('', 'fpm.toml')
+        call new(p, tomlfile, layout)
 
         call p%display(filepath, extension, exclude)
 
