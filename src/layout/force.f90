@@ -75,6 +75,8 @@ module modules_layout_force
         subroutine write_json()
             integer :: i, j, k, l, s
 
+            allocate(excludes_mods(0))
+
             write(unit,'(A)', advance='no') "       var datastr = '{"
             write(unit,'(A)', advance='no') '"nodes": ['
             do i = 1, size(model%packages)
@@ -101,7 +103,11 @@ module modules_layout_force
                             model%external_modules(j)%s, 0
                 modules = [modules, model%external_modules(j)]
             end do
-            inquire(unit=unit, pos=s); read(unit,'(A)', advance='no', pos=s-1)
+            if (unit == stdout) then
+                write(unit,'(A)', advance='no') char(8)
+            else
+                inquire(unit=unit, pos=s); read(unit,'(A)', advance='no', pos=s-1)
+            end if
             write(unit,'(A)', advance='no') '],'
             write(unit,'(A)', advance='no') '"links": ['
             do i = 1, size(model%packages)
@@ -119,7 +125,11 @@ module modules_layout_force
                     end do
                 end do
             end do
-            inquire(unit=unit, pos=s); read(unit,'(A)', advance='no', pos=s-1)
+            if (unit == stdout) then
+                write(unit,'(A)', advance='no') char(8)
+            else
+                inquire(unit=unit, pos=s); read(unit,'(A)', advance='no', pos=s-1)
+            end if
             write(unit,'(A)', advance='no') ']'
             write(unit,'(A)') "}';"
         end subroutine
