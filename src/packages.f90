@@ -87,7 +87,7 @@ module modules_packages
             allocate(this%l, source = force())
         case('dot')
             allocate(this%l, source = dot())
-        case('fpd')
+        case('fdp')
             allocate(this%l, source = fdp())
         case('sfdp')
             allocate(this%l, source = sfdp())
@@ -100,7 +100,7 @@ module modules_packages
         case('toml')
             allocate(this%l, source = toml())
         case default
-            call fpm_stop(1,'Unknown layout option. Supported values are "mermaid", "force", "dot", "fdp", "sfdp", "neato", "circle" and "json"')
+            call fpm_stop(1,'Unknown layout option. Supported values are "mermaid", "force", "dot", "fdp", "sfdp", "neato", "circle", "toml" and "json"')
         end select
     end subroutine
 
