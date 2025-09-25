@@ -8,7 +8,8 @@ module modules_utilities
     public :: chdir,            &
               string_contains,  &
               string_strip,     &
-              handle_error
+              handle_error,     &
+              fullpath
 
     interface
         integer function chdir_c(path) bind(c, name="chdir")
@@ -74,6 +75,21 @@ module modules_utilities
                 exit
             end if
         end do
+    end function
+
+    function fullpath(path) result(resolved_path)
+        character(*), intent(in) :: path
+        character(:), allocatable :: resolved_path
+
+        resolved_path = trim(adjustl(workdir() // path))
+    end function
+
+    function workdir() result(path)
+        character(:), allocatable :: path
+
+        allocate (character(256) :: path)
+        call getcwd(path)
+        path = trim(adjustl(path))
     end function
 
     subroutine handle_error(err)
