@@ -5,7 +5,7 @@
 #    define MACRO_SAME(A) A
 #    define MACRO_STRINGIFY(A) #A
 # endif
-#include <app.inc> 
+#include <app.inc>
 console(main)
     main(args)
         use fpm_filesystem, only : join_path
@@ -17,11 +17,11 @@ console(main)
                             stderr => error_unit
         
 
-        integer :: i, j, k, l, nargs
+        integer :: i, j, k, l, nargs, pos
         character(:), allocatable :: dir !< path to directory containing the fpm.toml file
         character(:), allocatable :: tomlfile
-        character(:), allocatable :: chart
-        character(:), allocatable :: output, filepath
+        character(:), allocatable :: layout
+        character(:), allocatable :: output, filepath, extension
         type(string_t), allocatable :: exclude(:)
         type(package) :: p
 #if defined(_VERSION)
@@ -34,7 +34,7 @@ console(main)
         i = 1
 
         !default
-        chart = 'mermaid'
+        layout = 'dot'
         dir = './'
         allocate(exclude(0))
 
@@ -62,9 +62,9 @@ console(main)
                     end do
                     exclude = [exclude, string_t(trim(args(i)%chars(k:merge(l-1, l, args(i)%chars(l:l)=='"'))))]
                 end if
-            case ('-c','--chart')
+            case ('-K','--layout')
                 i = i + 1
-                if (i <= nargs) chart = args(i)
+                if (i <= nargs) layout = args(i)
             case ('-v','--version')
                 i = i + 1
                 write(*, '(*(A,/))') 'fpm-modules version '//version,     &
@@ -80,8 +80,8 @@ console(main)
                                      '', &
                                      '                             Plugin Option List', &
                                      '                             --------------------', &
-                                     '-c, --chart       Selection of the layout engine. Supported values are "mermaid", "force",', & 
-                                     '                  "dot", "fdp", "sfdp", "neato", "circle" and "json"', &
+                                     '-K, --layout      Selection of the layout engine. Supported values are "mermaid", "force",', & 
+                                     '                  "dot", "fdp", "sfdp", "neato", and "circle"', &
                                      '-d, --dir         Directory containing the fpm compatible toml file at the root', &
                                      '                  of the project. By default it uses the current working directory.', &
                                      '                  The directory can also be passed by position, assuming the first', &
@@ -97,18 +97,21 @@ console(main)
             i = i + 1
         end do
 
+        if (allocated(output)) then
+            pos = index(output, '.', back=.true.)
+            filepath = fullpath(output(:pos-1))
+            extension = output(pos:)
+        else
+            filepath = ''
+            extension = ''
+        end if
+
         call chdir(dir)
 
         tomlfile = join_path('', 'fpm.toml')
-        call new(p, tomlfile, chart)
+        call new(p, tomlfile, layout)
 
-        if (allocated(output)) then
-            filepath = output
-        else
-            filepath = p%name//'.html'
-        end if
-
-        call p%display(filepath, exclude)
+        call p%display(filepath, extension, exclude)
 
     endmain
 end

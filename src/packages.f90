@@ -30,10 +30,10 @@ module modules_packages
 
     contains
 
-    subroutine package_new_from_file(pack, file, chart)
+    subroutine package_new_from_file(pack, file, layout)
         class(package), intent(out)         :: pack
         character(*), intent(in), optional  :: file
-        character(*), intent(in)            :: chart
+        character(*), intent(in)            :: layout
         !private
         type(error_t), allocatable :: error
         character(:), allocatable :: filepath
@@ -47,12 +47,12 @@ module modules_packages
         call get_package_data(pack%package_config_t, filepath, error, apply_defaults=.true.)
         call handle_error(error)
 
-        call pack%create(chart)
+        call pack%create(layout)
     end subroutine
 
-    subroutine package_create(this, chart)
+    subroutine package_create(this, layout)
         class(package), intent(inout)   :: this
-        character(*), intent(in)        :: chart
+        character(*), intent(in)        :: layout
         !private
         type(fpm_build_settings) :: settings
         type(error_t), allocatable :: error
@@ -80,14 +80,14 @@ module modules_packages
             call fpm_stop(1,'*package_build* Model error: '//error%message)
         end if
 
-        select case(chart)
+        select case(layout)
         case('mermaid')
             allocate(this%l, source = mermaid())
         case('force')
             allocate(this%l, source = force())
         case('dot')
             allocate(this%l, source = dot())
-        case('fpd')
+        case('fdp')
             allocate(this%l, source = fdp())
         case('sfdp')
             allocate(this%l, source = sfdp())
@@ -97,17 +97,20 @@ module modules_packages
             allocate(this%l, source = circle())
         case('json')
             allocate(this%l, source = json())
+        case('toml')
+            allocate(this%l, source = toml())
         case default
-            call fpm_stop(1,'Unknown chart option. Supported values are "mermaid", "force", "dot", "fdp", "sfdp", "neato", "circle" and "json"')
+            call fpm_stop(1,'Unknown layout option. Supported values are "mermaid", "force", "dot", "fdp", "sfdp", "neato", "circle", "toml" and "json"')
         end select
     end subroutine
 
-    subroutine package_display(this, filepath, exclude)
+    subroutine package_display(this, filepath, extension, exclude)
         class(package), intent(inout)       :: this
         character(*), intent(in)            :: filepath
+        character(*), intent(in)            :: extension
         type(string_t), optional, intent(in):: exclude(:)
 
-        call this%l%generate(this%model, filepath, exclude)
+        call this%l%generate(this%model, filepath, extension, exclude)
     end subroutine
 
 end module

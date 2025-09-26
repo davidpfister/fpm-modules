@@ -64,10 +64,24 @@ To build that library you need
 
 >- -d, --dir: The path to the directory where the fpm.toml file seats. </br>
 > ```fpm modules -d "./"```
->- -c, --chart: The charting library. Possible options are "mermaid" and "force" (default).</br>
-> ```fpm modules -c "mermaid"``` 
->- -x, -exclude: The list of excluded packages by name.  Names are comma-separated, no spaces, no quotes.</br>
+>- -K, --layout: The layout library. Possible options are "dot" (default), "fdp", "sfdp", "neato", "json", "toml", "mermaid" and "force".</br>
+> ```fpm modules -K "mermaid"``` 
+>- -x, --exclude: The list of excluded packages by name.  Names are comma-separated, no spaces, no quotes.</br>
 > ```fpm modules -x fpm,daglib```
+>- -o, --output: The path to the output file. By default, the standard output is used.
+
+Here is a table summarizing the different options and combinations that can be used:
+
+
+|-K|-o|
+|:---|:---|
+|(default: dot)|*.json, *.dot, *.gv, *.svg, *.jpg, *.png, *.html|
+|dot, fdp, sfdp, neato|*.json, *.dot, *.gv, *.svg, *.jpg, *.png, *.html|
+|circle|*.json, *.html|
+|force|*.json, *.html|
+|mermaid|*.mmd, *.html|
+|json|*.json|
+|toml|*.toml|
 
 ### Installation
 

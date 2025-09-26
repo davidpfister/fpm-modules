@@ -22,11 +22,11 @@ implicit-external = false
 source-form = "free"
 
 [preprocess]
-cpp.suffixes = ["F90", "f90"]
+cpp.suffixes = ["F90", "f90", "c"]
 cpp.macros = ["_FPM","_VERSION=\"'{version}'\""]
 
 [dependencies]
-fpm = {git = "https://github.com/fortran-lang/fpm"}
+fpm = {git = "https://github.com/fortran-lang/fpm", tag="v0.12.0"}
 
 [[test]]
 name = "test"
