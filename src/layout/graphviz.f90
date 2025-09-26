@@ -93,6 +93,8 @@ module modules_layout_graphviz
                 return
             end if
 
+            open(newunit=unit, file=this%name//'.gv'); close(unit, status='delete') !clean up
+
             if (len_trim(filepath) == 0) then
                 unit = stdout
             else
@@ -117,7 +119,7 @@ module modules_layout_graphviz
                     if (iostat /= 0) exit
                     write(unit, '(A)', advance='no') svg
                 end do
-                close(sunit)
+                close(sunit, status='delete') !clean up
             end if
             write(unit,'(*(A,/))')              &
             '   </div>'                     ,   &
@@ -154,11 +156,11 @@ module modules_layout_graphviz
             call write_dot()
             close(unit)
 
-            if (len_trim(filepath) == 0) then
-                call execute_command_line(this%name//' '//this%name//'.gv', wait=.true., exitstat=iostat, cmdmsg=iomsg)
-            else
-                call execute_command_line(this%name//' '//this%name//'.gv > '//filepath//extension, wait=.true., exitstat=iostat, cmdmsg=iomsg)
+            if (len_trim(filepath) /= 0) then
+                call execute_command_line(this%name//' -T'//extension(2:)//' '//this%name//'.gv > '//filepath//extension, wait=.true., exitstat=iostat, cmdmsg=iomsg)
             end if
+
+            open(newunit=unit, file=this%name//'.gv'); close(unit, status='delete') !clean up
             
             if (iostat /= 0) then
                 error = error_t('Error: Graphviz command '//trim(this%name)//' failed. Message: '//trim(iomsg))
