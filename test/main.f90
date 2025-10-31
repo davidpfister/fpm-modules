@@ -113,4 +113,23 @@ TESTPROGRAM(main)
 
         close(unit, status='delete')
     END_TEST
+
+    TEST('test_markmap')
+        use modules_packages
+
+        type(package) :: p
+        logical :: exist
+        integer :: unit, s
+
+        call new(p, 'fpm.toml', 'markmap')
+        call p%display('test/test_markmap', '.html')
+
+        open(newunit=unit, file='test/test_markmap.html')
+        inquire(unit=unit, exist=exist, size=s)
+
+        EXPECT_TRUE(exist)
+        EXPECT_GT(s, 0)
+
+        close(unit, status='delete')
+    END_TEST
 END_TESTPROGRAM

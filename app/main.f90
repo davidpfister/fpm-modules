@@ -81,7 +81,7 @@ console(main)
                                      '                             Plugin Option List', &
                                      '                             --------------------', &
                                      '-K, --layout      Selection of the layout engine. Supported values are "mermaid", "force",', & 
-                                     '                  "dot", "fdp", "sfdp", "neato", and "circle"', &
+                                     '                  "dot", "fdp", "sfdp", "neato", "markmap", and "circle"', &
                                      '-d, --dir         Directory containing the fpm compatible toml file at the root', &
                                      '                  of the project. By default it uses the current working directory.', &
                                      '                  The directory can also be passed by position, assuming the first', &

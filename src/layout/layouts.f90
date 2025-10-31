@@ -6,6 +6,7 @@ module modules_layouts
     use modules_layout_json, only: json
     use modules_layout_circle, only: circle
     use modules_layout_toml, only: toml
+    use modules_layout_markmap, only: markmap
 
     implicit none; public
 end module

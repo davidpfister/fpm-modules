@@ -99,8 +99,10 @@ module modules_packages
             allocate(this%l, source = json())
         case('toml')
             allocate(this%l, source = toml())
+        case('markmap')
+            allocate(this%l, source = markmap())
         case default
-            call fpm_stop(1,'Unknown layout option. Supported values are "mermaid", "force", "dot", "fdp", "sfdp", "neato", "circle", "toml" and "json"')
+            call fpm_stop(1,'Unknown layout option. Supported values are "mermaid", "force", "dot", "fdp", "sfdp", "neato", "circle", "toml", "markmap" and "json"')
         end select
     end subroutine
 
