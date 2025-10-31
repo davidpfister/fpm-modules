@@ -74,7 +74,7 @@ console(main)
                 stop
             case ('-h','--help', '?')
                 i = i + 1
-                write(*, '(*(A,/))') '                             fom-modules plugin help', &
+                write(*, '(*(A,/))') '                             fpm-modules plugin help', &
                                      '                             =======================', &
                                      'fpm-modules is a simple plugin for modern Fortran to generate module dependency graphs.', &
                                      '', &
