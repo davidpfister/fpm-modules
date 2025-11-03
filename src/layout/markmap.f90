@@ -19,11 +19,12 @@ module modules_layout_markmap
 
     contains
 
-    subroutine generate_markmap(this, model, filepath, extension, exclude)
+    subroutine generate_markmap(this, model, filepath, extension, submodules, exclude)
         class(markmap), intent(in)               :: this
         class(fpm_model_t), intent(inout)       :: model
         character(*), intent(in)                :: filepath
         character(*), intent(in)                :: extension
+        type(string_t), intent(in)              :: submodules(:)
         type(string_t), optional, intent(in)    :: exclude(:)
         !private
         integer :: unit

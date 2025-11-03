@@ -17,11 +17,12 @@ module modules_layout_toml
 
     contains
 
-    subroutine generate_toml(this, model, filepath, extension, exclude)
+    subroutine generate_toml(this, model, filepath, extension, submodules, exclude)
         class(toml), intent(in)                 :: this
         class(fpm_model_t), intent(inout)       :: model
         character(*), intent(in)                :: filepath
         character(*), intent(in)                :: extension
+        type(string_t), intent(in)              :: submodules(:)
         type(string_t), optional, intent(in)    :: exclude(:)
         !private
         type(error_t), allocatable :: error

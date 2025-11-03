@@ -17,11 +17,12 @@ module modules_layout_mermaid
 
     contains
 
-    subroutine generate_mermaid(this, model, filepath, extension, exclude)
+    subroutine generate_mermaid(this, model, filepath, extension, submodules, exclude)
         class(mermaid), intent(in)              :: this
         class(fpm_model_t), intent(inout)       :: model
         character(*), intent(in)                :: filepath
         character(*), intent(in)                :: extension
+        type(string_t), intent(in)              :: submodules(:)
         type(string_t), optional, intent(in)    :: exclude(:)
         !private
         type(error_t), allocatable :: error
@@ -122,6 +123,9 @@ module modules_layout_mermaid
                                 write(unit,'("    ", A, "-->", A)') model%packages(i)%sources(j)%modules_provided(k)%s, model%packages(i)%sources(j)%modules_used(l)%s
                             end if
                         end do
+                        if (merge(size(model%packages(i)%sources(j)%parent_modules), 0, allocated(model%packages(i)%sources(j)%parent_modules)) > 0) then
+                            write(unit,'("    ", A, "-.->", A)') model%packages(i)%sources(j)%parent_modules(1)%s, model%packages(i)%sources(j)%modules_provided(k)%s
+                        end if
                         exit !set all the use to belong to the first module in the file
                     end do
                 end do

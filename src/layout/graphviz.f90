@@ -66,11 +66,12 @@ module modules_layout_graphviz
             that%graphviz = graphviz('neato')
     end function
 
-    subroutine generate_graphviz(this, model, filepath, extension, exclude)
+    subroutine generate_graphviz(this, model, filepath, extension, submodules, exclude)
         class(graphviz), intent(in)             :: this
         class(fpm_model_t), intent(inout)       :: model
         character(*), intent(in)                :: filepath
         character(*), intent(in)                :: extension
+        type(string_t), intent(in)              :: submodules(:)
         type(string_t), optional, intent(in)    :: exclude(:)
         !private
         
@@ -207,18 +208,21 @@ module modules_layout_graphviz
                 write(unit,'("    subgraph cluster_", i0, " {")') i
                 write(unit,'("        ", A)') 'style=filled'
                 write(unit,'("        ", A)') 'color=lightgrey'
-                write(unit,'("        ", A)') 'node [style=filled,color=white]'
+                write(unit,'("        ", A)') 'node [style=filled,color=white, shape=box]'
                 write(unit,'("        label = """, A, """")') string_strip(model%packages(i)%name)
                 do j = 1, size(model%packages(i)%sources)
                     do k = 1, size(model%packages(i)%sources(j)%modules_provided)
                         is_added = .false.
                         do l = 1, size(model%packages(i)%sources(j)%modules_used)
                             if (.not. string_contains(excludes_mods, model%packages(i)%sources(j)%modules_used(l)) .and. &
-                                    string_contains(smods(i)%modules, model%packages(i)%sources(j)%modules_used(l))) then
-                                write(unit,'("        ", A, " -> ", A, A)') model%packages(i)%sources(j)%modules_provided(k)%s, model%packages(i)%sources(j)%modules_used(l)%s, '[style="dashed"]'
+                                      string_contains(smods(i)%modules, model%packages(i)%sources(j)%modules_used(l))) then
+                                write(unit,'("        ", A, " -> ", A, A)') model%packages(i)%sources(j)%modules_provided(k)%s, model%packages(i)%sources(j)%modules_used(l)%s, '[style="solid"]'
                                 is_added = .true.
                             end if
                         end do
+                        if (merge(size(model%packages(i)%sources(j)%parent_modules), 0, allocated(model%packages(i)%sources(j)%parent_modules)) > 0) then
+                            write(unit,'("        ", A, " -> ", A, A)') model%packages(i)%sources(j)%parent_modules(1)%s, model%packages(i)%sources(j)%modules_provided(k)%s, '[style="dashed"]'
+                        end if
                         if (.not. is_added) then
                             write(unit,'("        ", A)') model%packages(i)%sources(j)%modules_provided(k)%s
                         end if
