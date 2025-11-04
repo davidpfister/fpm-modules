@@ -5,6 +5,7 @@ module modules_layout_json
     use fpm_model, only: fpm_model_t
     use fpm_strings, only: string_t
     use fpm_error, only : error_t
+    use modules_submodules, only: submodule_t
 
     implicit none; private
 
@@ -17,11 +18,12 @@ module modules_layout_json
 
     contains
 
-    subroutine generate_json(this, model, filepath, extension, exclude)
+    subroutine generate_json(this, model, filepath, extension, submodules, exclude)
         class(json), intent(in)                 :: this
         class(fpm_model_t), intent(inout)       :: model
         character(*), intent(in)                :: filepath
         character(*), intent(in)                :: extension
+        type(submodule_t), intent(in)           :: submodules(:)
         type(string_t), optional, intent(in)    :: exclude(:)
         !private
         type(error_t), allocatable :: error

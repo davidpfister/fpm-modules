@@ -5,7 +5,7 @@
         "name": "(gdb) Fortran",
         "type": "cppdbg",
         "request": "launch",
-        "program": "${workspaceFolder}/build/gfortran_23F08250062B633E/app/fpm-modules.exe",
+        "program": "${workspaceFolder}/build/gfortran_23F08250062B633E/test/test.exe",
         "args": ["C:\\Users\\dev\\Documents\\GitHub\\sandbox\\fpm-modules"],
         "stopAtEntry": false,
         "cwd": "${workspaceFolder}",

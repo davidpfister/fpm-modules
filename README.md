@@ -82,6 +82,7 @@ Here is a table summarizing the different options and combinations that can be u
 |mermaid|*.mmd, *.html|
 |json|*.json|
 |toml|*.toml|
+|markmap|*.html, *.md|
 
 ### Installation
 

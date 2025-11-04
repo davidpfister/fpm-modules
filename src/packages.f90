@@ -7,6 +7,7 @@ module modules_packages
     use fpm_manifest, only : package_config_t, get_package_data
     use fpm_model, only: fpm_model_t
     use fpm, only: build_model
+    use modules_submodules, only: submodule_t, build_submodules
     use modules_utilities
     use modules_layouts
 
@@ -18,6 +19,7 @@ module modules_packages
         private
         type(fpm_model_t), public           :: model
         class(layout), allocatable          :: l
+        type(submodule_t), allocatable      :: submodules(:)
     contains
         private
         procedure, pass(this)         :: create => package_create
@@ -56,6 +58,7 @@ module modules_packages
         !private
         type(fpm_build_settings) :: settings
         type(error_t), allocatable :: error
+        integer :: i, j, k
 
         settings = fpm_build_settings(  &
         &   profile=" ",&
@@ -76,6 +79,9 @@ module modules_packages
         &   verbose=.false.)
 
         call build_model(this%model, settings, this%package_config_t, error)
+        this%submodules = build_submodules(this%model)
+
+        
         if (allocated(error)) then
             call fpm_stop(1,'*package_build* Model error: '//error%message)
         end if
@@ -99,8 +105,10 @@ module modules_packages
             allocate(this%l, source = json())
         case('toml')
             allocate(this%l, source = toml())
+        case('markmap')
+            allocate(this%l, source = markmap())
         case default
-            call fpm_stop(1,'Unknown layout option. Supported values are "mermaid", "force", "dot", "fdp", "sfdp", "neato", "circle", "toml" and "json"')
+            call fpm_stop(1,'Unknown layout option. Supported values are "mermaid", "force", "dot", "fdp", "sfdp", "neato", "circle", "toml", "markmap" and "json"')
         end select
     end subroutine
 
@@ -110,7 +118,7 @@ module modules_packages
         character(*), intent(in)            :: extension
         type(string_t), optional, intent(in):: exclude(:)
 
-        call this%l%generate(this%model, filepath, extension, exclude)
+        call this%l%generate(this%model, filepath, extension, this%submodules, exclude)
     end subroutine
 
 end module
