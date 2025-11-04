@@ -7,6 +7,7 @@ module modules_packages
     use fpm_manifest, only : package_config_t, get_package_data
     use fpm_model, only: fpm_model_t
     use fpm, only: build_model
+    use modules_submodules, only: submodule_t, build_submodules
     use modules_utilities
     use modules_layouts
 
@@ -18,7 +19,7 @@ module modules_packages
         private
         type(fpm_model_t), public           :: model
         class(layout), allocatable          :: l
-        type(string_t), allocatable         :: submodules(:)
+        type(submodule_t), allocatable      :: submodules(:)
     contains
         private
         procedure, pass(this)         :: create => package_create
@@ -78,15 +79,9 @@ module modules_packages
         &   verbose=.false.)
 
         call build_model(this%model, settings, this%package_config_t, error)
-        allocate(this%submodules(0))
+        this%submodules = build_submodules(this%model)
 
-        do i = 1, size(this%model%packages)
-            do j = 1, size(this%model%packages(i)%sources)
-                if (merge(size(this%model%packages(i)%sources(j)%parent_modules), 0, allocated(this%model%packages(i)%sources(j)%parent_modules)) > 0) then
-                    this%submodules = [this%submodules, this%model%packages(i)%sources(j)%modules_provided(:)]
-                end if
-            end do
-        end do
+        
         if (allocated(error)) then
             call fpm_stop(1,'*package_build* Model error: '//error%message)
         end if

@@ -1,6 +1,7 @@
 module modules_layout
     use fpm_model, only: fpm_model_t
     use fpm_strings, only: string_t
+    use modules_submodules, only: submodule_t
 
     implicit none; private
 
@@ -19,7 +20,7 @@ module modules_layout
             class(fpm_model_t), intent(inout)       :: model
             character(*), intent(in)                :: filepath
             character(*), intent(in)                :: extension
-            type(string_t), intent(in)              :: submodules(:)
+            type(submodule_t), intent(in)           :: submodules(:)
             type(string_t), optional, intent(in)    :: exclude(:)
         end subroutine
     end interface

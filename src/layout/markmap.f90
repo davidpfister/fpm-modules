@@ -7,6 +7,7 @@ module modules_layout_markmap
     use fpm_strings, only: string_t
     use fpm_error, only : error_t
     use fpm_filesystem, only: basename
+    use modules_submodules, only: submodule_t
 
     implicit none; private
 
@@ -24,7 +25,7 @@ module modules_layout_markmap
         class(fpm_model_t), intent(inout)       :: model
         character(*), intent(in)                :: filepath
         character(*), intent(in)                :: extension
-        type(string_t), intent(in)              :: submodules(:)
+        type(submodule_t), intent(in)           :: submodules(:)
         type(string_t), optional, intent(in)    :: exclude(:)
         !private
         integer :: unit

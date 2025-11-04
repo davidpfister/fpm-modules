@@ -5,6 +5,7 @@ module modules_layout_graphviz
     use fpm_model, only: fpm_model_t
     use fpm_strings, only: string_t
     use fpm_error, only : error_t
+    use modules_submodules, only: submodule_t, is_submodule
 
     implicit none; private
 
@@ -71,7 +72,7 @@ module modules_layout_graphviz
         class(fpm_model_t), intent(inout)       :: model
         character(*), intent(in)                :: filepath
         character(*), intent(in)                :: extension
-        type(string_t), intent(in)              :: submodules(:)
+        type(submodule_t), intent(in)           :: submodules(:)
         type(string_t), optional, intent(in)    :: exclude(:)
         !private
         
@@ -188,63 +189,68 @@ module modules_layout_graphviz
 
             write(unit, '(A)') 'digraph modules {'
             do i = 1, size(model%packages)
-                allocate(smods(i)%modules(0))
-                if (present(exclude)) then
-                    if (string_contains(exclude, model%packages(i)%name)) then
-                        do j = 1, size(model%packages(i)%sources)
-                            do k = 1, size(model%packages(i)%sources(j)%modules_provided)
-                                excludes_mods = [excludes_mods, model%packages(i)%sources(j)%modules_provided(k)]
+                associate(s => model%packages(i)%sources)
+                    allocate(smods(i)%modules(0))
+                    if (present(exclude)) then
+                        if (string_contains(exclude, model%packages(i)%name)) then
+                            do j = 1, size(s)
+                                do k = 1, size(s(j)%modules_provided)
+                                    excludes_mods = [excludes_mods, s(j)%modules_provided(k)]
+                                end do
                             end do
-                        end do
-                        cycle
+                            cycle
+                        end if
                     end if
-                end if
-                do j = 1, size(model%packages(i)%sources)
-                    do k = 1, size(model%packages(i)%sources(j)%modules_provided)
-                        smods(i)%modules = [smods(i)%modules, model%packages(i)%sources(j)%modules_provided(k)]
-                    end do
-                end do
-
-                write(unit,'("    subgraph cluster_", i0, " {")') i
-                write(unit,'("        ", A)') 'style=filled'
-                write(unit,'("        ", A)') 'color=lightgrey'
-                write(unit,'("        ", A)') 'node [style=filled,color=white, shape=box]'
-                write(unit,'("        label = """, A, """")') string_strip(model%packages(i)%name)
-                do j = 1, size(model%packages(i)%sources)
-                    do k = 1, size(model%packages(i)%sources(j)%modules_provided)
-                        is_added = .false.
-                        do l = 1, size(model%packages(i)%sources(j)%modules_used)
-                            if (.not. string_contains(excludes_mods, model%packages(i)%sources(j)%modules_used(l)) .and. &
-                                      string_contains(smods(i)%modules, model%packages(i)%sources(j)%modules_used(l))) then
-                                write(unit,'("        ", A, " -> ", A, A)') model%packages(i)%sources(j)%modules_provided(k)%s, model%packages(i)%sources(j)%modules_used(l)%s, '[style="solid"]'
-                                is_added = .true.
-                            end if
+                    do j = 1, size(s)
+                        do k = 1, size(s(j)%modules_provided)
+                            smods(i)%modules = [smods(i)%modules, s(j)%modules_provided(k)]
                         end do
-                        if (merge(size(model%packages(i)%sources(j)%parent_modules), 0, allocated(model%packages(i)%sources(j)%parent_modules)) > 0) then
-                            write(unit,'("        ", A, " -> ", A, A)') model%packages(i)%sources(j)%parent_modules(1)%s, model%packages(i)%sources(j)%modules_provided(k)%s, '[style="dashed"]'
-                        end if
-                        if (.not. is_added) then
-                            write(unit,'("        ", A)') model%packages(i)%sources(j)%modules_provided(k)%s
-                        end if
-                        exit !set all the use to belong to the first module in the file
                     end do
-                end do
-                write(unit,'(A)') '    }'
+
+                    write(unit,'("    subgraph cluster_", i0, " {")') i
+                    write(unit,'("        ", A)') 'style=filled'
+                    write(unit,'("        ", A)') 'color=lightgrey'
+                    write(unit,'("        ", A)') 'node [style=filled,color=white, shape=box]'
+                    write(unit,'("        label = """, A, """")') string_strip(model%packages(i)%name)
+                    do j = 1, size(s)
+                        do k = 1, size(s(j)%modules_provided)
+                            is_added = .false.
+                            do l = 1, size(s(j)%modules_used)
+                                if (.not. string_contains(excludes_mods, s(j)%modules_used(l)) .and. &
+                                        string_contains(smods(i)%modules, s(j)%modules_used(l)) .and. &
+                                    .not. is_submodule(submodules, s(j)%modules_provided(k)%s, s(j)%modules_used(l)%s)) then
+                                    write(unit,'("        ", A, " -> ", A, A)') s(j)%modules_provided(k)%s, s(j)%modules_used(l)%s, '[style="solid"]'
+                                    is_added = .true.
+                                end if
+                            end do
+                            if (merge(size(s(j)%parent_modules), 0, allocated(s(j)%parent_modules)) > 0) then
+                                write(unit,'("        ", A, " -> ", A, A)') s(j)%parent_modules(1)%s, s(j)%modules_provided(k)%s, '[style="dashed"]'
+                            end if
+                            if (.not. is_added) then
+                                write(unit,'("        ", A)') s(j)%modules_provided(k)%s
+                            end if
+                            exit !set all the use to belong to the first module in the file
+                        end do
+                    end do
+                    write(unit,'(A)') '    }'
+                end associate    
             end do
 
             do i = 1, size(model%packages)
                 if (present(exclude)) then; if (string_contains(exclude, model%packages(i)%name)) cycle; end if
-                do j = 1, size(model%packages(i)%sources)
-                    do k = 1, size(model%packages(i)%sources(j)%modules_provided)
-                        do l = 1, size(model%packages(i)%sources(j)%modules_used)
-                            if (.not. string_contains(excludes_mods, model%packages(i)%sources(j)%modules_used(l)) .and. &
-                                .not. string_contains(smods(i)%modules, model%packages(i)%sources(j)%modules_used(l))) then
-                                write(unit,'("    ", A, "->", A)') model%packages(i)%sources(j)%modules_provided(k)%s, model%packages(i)%sources(j)%modules_used(l)%s
-                            end if
+                associate(s => model%packages(i)%sources)
+                    do j = 1, size(s)
+                        do k = 1, size(s(j)%modules_provided)
+                            do l = 1, size(s(j)%modules_used)
+                                if (.not. string_contains(excludes_mods, s(j)%modules_used(l)) .and. &
+                                    .not. string_contains(smods(i)%modules, s(j)%modules_used(l))) then
+                                    write(unit,'("    ", A, "->", A)') s(j)%modules_provided(k)%s, s(j)%modules_used(l)%s
+                                end if
+                            end do
+                            exit !set all the use to belong to the first module in the file
                         end do
-                        exit !set all the use to belong to the first module in the file
                     end do
-                end do
+                end associate
             end do
             write(unit,'(A)') '}'
         end subroutine

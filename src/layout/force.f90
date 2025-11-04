@@ -5,6 +5,7 @@ module modules_layout_force
     use modules_utilities, only: string_contains, handle_error
     use fpm_strings, only: string_t
     use fpm_error, only : error_t
+    use modules_submodules, only: submodule_t
 
     implicit none; private
 
@@ -22,7 +23,7 @@ module modules_layout_force
         class(fpm_model_t), intent(inout)       :: model
         character(*), intent(in)                :: filepath
         character(*), intent(in)                :: extension
-        type(string_t), intent(in)              :: submodules(:)
+        type(submodule_t), intent(in)           :: submodules(:)
         type(string_t), optional, intent(in)    :: exclude(:)
         !private
         type(error_t), allocatable :: error
