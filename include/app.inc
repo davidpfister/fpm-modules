@@ -39,24 +39,24 @@ module applibrary
         end subroutine
     end interface
 
-    type, public :: string
+    type, public :: argument
         private
         character(:), allocatable, public :: chars
     contains
-        procedure, private, pass(lhs) :: string_assign_string
-        procedure, private, pass(lhs) :: string_assign_character
-        procedure, private, pass(rhs) :: character_assign_string
-        generic :: assignment(=)      => string_assign_string,    &  
-                                         string_assign_character, &
-                                         character_assign_string
-        procedure, private, pass(dtv) :: string_read_formatted
-        procedure, private, pass(dtv) :: string_write_formatted
-        procedure, private, pass(dtv) :: string_read_unformatted !! Unformatted input.
-        procedure, private, pass(dtv) :: string_write_unformatted
-        generic :: read (formatted)   => string_read_formatted
-        generic :: write (formatted)  => string_write_formatted
-        generic :: read (unformatted) => string_read_unformatted
-        generic :: write (unformatted)=> string_write_unformatted
+        procedure, private, pass(lhs) :: argument_assign_argument
+        procedure, private, pass(lhs) :: argument_assign_character
+        procedure, private, pass(rhs) :: character_assign_argument
+        generic :: assignment(=)      => argument_assign_argument,      &  
+                                         argument_assign_character,     &
+                                         character_assign_argument
+        procedure, private, pass(dtv) :: argument_read_formatted
+        procedure, private, pass(dtv) :: argument_write_formatted
+        procedure, private, pass(dtv) :: argument_read_unformatted !! Unformatted input.
+        procedure, private, pass(dtv) :: argument_write_unformatted
+        generic :: read (formatted)   => argument_read_formatted
+        generic :: write (formatted)  => argument_write_formatted
+        generic :: read (unformatted) => argument_read_unformatted
+        generic :: write (unformatted)=> argument_write_unformatted
     end type
     
     type, public :: application
@@ -82,11 +82,11 @@ module applibrary
     end interface
 
     interface trim
-        module procedure :: string_trim
+        module procedure :: argument_trim
     end interface
     
     interface index
-        module procedure :: string_index
+        module procedure :: argument_index
     end interface
 
     contains
@@ -118,13 +118,15 @@ module applibrary
 
     subroutine app_abort(this)
         class(application), intent(inout) :: this
+#ifndef __GFORTRAN__
         interface
-            subroutine abort_c() bind(C, name="abort")
+            subroutine abort() bind(C, name="abort")
             end subroutine
         end interface
+#endif
 
         call app_finalize(this)
-        call abort_c()
+        call abort()
     end subroutine
 
     subroutine app_shutdown(this, code)
@@ -162,7 +164,7 @@ module applibrary
     function split_commandline_into_args0() result(args)
         !private
         character(:), allocatable   :: commandline
-        type(string), allocatable   :: args(:)
+        type(argument), allocatable :: args(:)
         !private
         integer :: length
 
@@ -179,8 +181,7 @@ module applibrary
 
     function split_commandline_into_args1(commandline) result(args)
         character(*), intent(in)    :: commandline
-        !private
-        type(string), allocatable   :: args(:)
+        type(argument), allocatable :: args(:)
 
         args = split_commandline_into_args2(commandline, .true.)
     end function
@@ -188,8 +189,8 @@ module applibrary
     function split_commandline_into_args2(commandline, removeHashComments) result(args)
         character(*), intent(in)    :: commandline
         logical, intent(in)         :: removeHashComments
+        type(argument), allocatable :: args(:)
         !private
-        type(string), allocatable   :: args(:)
         character(1), allocatable   :: dummy(:)
 
         args = split_commandline_into_args3(commandline, .true., dummy)
@@ -226,8 +227,8 @@ module applibrary
         character(*), intent(in)                :: commandline
         logical, intent(in)                     :: removeHashComments
         character(1), allocatable, intent(out)  :: illegalChar(:)
+        type(argument), allocatable             :: args(:)
         !private
-        type(string), allocatable   :: args(:)
         character(:), allocatable :: builder
         integer :: i, j, k, n, quoteCount, slashCount
         character(1) :: current
@@ -301,7 +302,7 @@ module applibrary
 
             builder = trim(adjustl(builder(1:n)))
             if (len(builder) > 0) then
-                args = [args, string(builder)]
+                args = [args, argument(builder)]
             end if
         end do
     end function
@@ -320,44 +321,45 @@ module applibrary
         end if
     end function
 
-    pure subroutine string_assign_string(lhs, rhs)
-        class(string), intent(inout) :: lhs
-        type(string),  intent(in)    :: rhs
+    pure subroutine argument_assign_argument(lhs, rhs)
+        class(argument), intent(inout) :: lhs
+        type(argument),  intent(in)    :: rhs
 
         if (allocated(rhs%chars)) lhs%chars = rhs%chars
     end subroutine
 
-    pure subroutine string_assign_character(lhs, rhs)
-        class(string), intent(inout) :: lhs
-        character(*), intent(in)     :: rhs
+    pure subroutine argument_assign_character(lhs, rhs)
+        class(argument), intent(inout) :: lhs
+        character(*), intent(in)       :: rhs
 
         lhs%chars = rhs
     end subroutine
 
-    pure subroutine character_assign_string(lhs, rhs)
+    pure subroutine character_assign_argument(lhs, rhs)
         character(:), allocatable, intent(inout) :: lhs
-        class(string), intent(in)     :: rhs
+        class(argument),  intent(in)             :: rhs
+        
 
-        if (allocated(rhs%chars)) lhs = rhs%chars
+        lhs = rhs%chars
     end subroutine
     
-    function string_trim(str) result(res)
-        class(string), intent(in) :: str
-        character(:), allocatable :: res
+    function argument_trim(str) result(res)
+        class(argument), intent(in) :: str
+        character(:), allocatable   :: res
         
         res = trim(str%chars)
     end function
     
-    integer function string_index(str, substr, back) result(res)
-        type(string), intent(in) :: str
-        character(*), intent(in) :: substr
-        logical, optional, intent(in) :: back
+    integer function argument_index(str, substr, back) result(res)
+        type(argument), intent(in)      :: str
+        character(*), intent(in)        :: substr
+        logical, optional, intent(in)   :: back
         
         res = index(str%chars, substr, back)
     end function
     
-    subroutine string_write_formatted(dtv, unit, iotype, v_list, iostat, iomsg)
-        class(string), intent(in)   :: dtv !< The string.
+    subroutine argument_write_formatted(dtv, unit, iotype, v_list, iostat, iomsg)
+        class(argument), intent(in) :: dtv !< The argument.
         integer, intent(in)         :: unit !< Logical unit.
         character(*), intent(in)    :: iotype !< Edit descriptor.
         integer, intent(in)         :: v_list(:) !< Edit descriptor list.
@@ -365,19 +367,14 @@ module applibrary
         character(*), intent(inout) :: iomsg !< IO status message.
 
         if (allocated(dtv%chars)) then
-            select case(iotype)
-            case('LISTDIRECTED')
-                write (unit, '(" ", A)', iostat=iostat, iomsg=iomsg, advance='no') dtv%chars
-            case default
-                write (unit, '(A)', iostat=iostat, iomsg=iomsg) dtv%chars
-            end select
+            write (unit, '(A)', iostat=iostat, iomsg=iomsg) dtv%chars
         else
             write (unit, '(A)', iostat=iostat, iomsg=iomsg) ''
         end if
     end subroutine
     
-    subroutine string_read_formatted(dtv, unit, iotype, v_list, iostat, iomsg)
-        class(string), intent(inout)    :: dtv !< The string.
+    subroutine argument_read_formatted(dtv, unit, iotype, v_list, iostat, iomsg)
+        class(argument), intent(inout)    :: dtv !< The argument.
         integer, intent(in)             :: unit !< Logical unit.
         character(*), intent(in)        :: iotype !< Edit descriptor.
         integer, intent(in)             :: v_list(:) !< Edit descriptor list.
@@ -393,8 +390,8 @@ module applibrary
         dtv%chars = buffer
     end subroutine
 
-    subroutine string_read_unformatted(dtv, unit, iostat, iomsg)
-        class(string), intent(inout)    :: dtv !< The string.
+    subroutine argument_read_unformatted(dtv, unit, iostat, iomsg)
+        class(argument), intent(inout)  :: dtv !< The argument.
         integer, intent(in)             :: unit !< Logical unit.
         integer, intent(out)            :: iostat !< IO status code.
         character(*), intent(inout)     :: iomsg !< IO status message.
@@ -408,8 +405,8 @@ module applibrary
         dtv%chars = buffer
       end subroutine
   
-      subroutine string_write_unformatted(dtv, unit, iostat, iomsg)
-          class(string), intent(in)     :: dtv !! The string.
+      subroutine argument_write_unformatted(dtv, unit, iostat, iomsg)
+          class(argument), intent(in)   :: dtv !! The argument.
           integer, intent(in)           :: unit !! Logical unit.
           integer, intent(out)          :: iostat !! IO status code.
           character(*), intent(inout)   :: iomsg !! IO status message.
@@ -426,7 +423,7 @@ end module
 program name; \
 use applibrary; \
 implicit none; \
-type(string), allocatable :: args(:); \
+type(argument), allocatable :: args(:); \
 args = split_commandline_into_args(); \
 if (size(args) > 1) then; \
 call startup(args(2:)); \
@@ -436,7 +433,7 @@ call startup(args); \
 end if;\
 contains 
 #define main(args) subroutine startup(args); \
-type(string), intent(in) :: args(:); \
+type(argument), intent(in) :: args(:); \
 type(application) :: app; \
 block
 #define endmain end block; \
