@@ -26,6 +26,12 @@
 ! (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 ! OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 # define ESCAPE achar(27)
+# define ANSI_RED ESCAPE//'[31m'
+# define ANSI_GREEN ESCAPE//'[32m'
+# define ANSI_NONE ESCAPE//'[0m '
+# define ANSI_FAILED ANSI_RED//'[  FAILED  ]'//ANSI_NONE
+# define ANSI_PASSED ANSI_GREEN//'[  PASSED  ]'//ANSI_NONE
+# define ANSI_OK ANSI_GREEN//'[       OK ]'//ANSI_NONE
 # ifdef __GFORTRAN__
 #    define MACRO_SAME(A) A
 #    define MACRO_CAT2(A,B) MACRO_SAME(A)B
@@ -36,95 +42,100 @@
 #    define MACRO_CAT3(A,B,C) A ## B ## C
 #    define MACRO_STRINGIFY(A) #A
 # endif
-# define LOWERCASE(sin, sout)                                          \
-do i = 1, len_trim(sin);                                               \
-j = iachar(sin(i:i));                                                  \
-if (j>= iachar('A') .and. j<=iachar('Z') ) then;                       \
-sout(i:i) = achar(iachar(sin(i:i))+32);                                \
-else;                                                                  \
-sout(i:i) = sin(i:i);                                                  \
-end if;                                                                \
+# define LOWERCASE(sin, sout) \
+do i = 1, len_trim(sin); \
+j = iachar(sin(i:i)); \
+if (j>= iachar('A') .and. j<=iachar('Z') ) then; \
+sout(i:i) = achar(iachar(sin(i:i))+32); \
+else; \
+sout(i:i) = sin(i:i); \
+end if; \
 end do;
-# define REPORT_FAILURE(expected, actual)                              \
-nfailures = nfailures + 1;                                             \
-call cpu_time(toc_assert);                                             \
-write(*,'(A, A, I3, A)') testname,'(', __LINE__,') : error:'; \
+# define REPORT_FAILURE(expected, actual) \
+nfailures = nfailures + 1; \
+call cpu_time(toc_assert); \
+write(output_unit,'(A, " (", I3, ") : error:")', advance='no') testname, __LINE__; \
+call flush(output_unit);write(output_unit,*) ''; \
 print*, '   Actual: ', actual; \
 print*, ' Expected: ', expected; \
-write(*,'(A, A, A, A, A, I3, A, E10.3, A)') ESCAPE//'[31m'//'[  FAILED  ]'//ESCAPE//'[0m ', testcase,'.', testname, ' line ', __LINE__,' (', toc_assert - tic_assert, ' ms)'; \
-call flush(output_unit);
-# define REPORT_SUCCESS                                                \
-nsuccess = nsuccess + 1;                                               \
-call cpu_time(toc_assert);                                             \
-write(*,'(A, A, A, A, A, I3, A, E10.3, A)') ESCAPE//'[32m'//'[       OK ]'//ESCAPE//'[0m ', testcase,'.', testname, ' line ', __LINE__,' (', toc_assert - tic_assert, ' ms)'; \
-call flush(output_unit);
-# define TESTPROGRAM(name)                                             \
-PROGRAMNAME(name)                                                      \
-USE_ISO_FORTRAN                                                        \
-IMPLICIT_NONE                                                          \
-integer :: nfailures_all = 0;                                          \
-integer :: nsuccess_all = 0;                                           \
-write(*,'(A, A)') '[==========] Running test cases from ', __FILE__ ;  \
-call flush(output_unit);
-# define PROGRAMNAME(name)                                             \
+write(*,'(A, A, ". ", A, " line ", I3, " (", E10.3, " ms)")', advance='no') ANSI_FAILED, testcase, testname, __LINE__, toc_assert - tic_assert;\
+call flush(output_unit);write(output_unit,*) '';
+# define REPORT_SUCCESS \
+nsuccess = nsuccess + 1; \
+call cpu_time(toc_assert); \
+write(output_unit,'(A, A, ". ", A, " line ", I3, " (", E10.3, " ms)")', advance='no') ANSI_OK, testcase, testname, __LINE__, toc_assert - tic_assert;\
+call flush(output_unit);write(output_unit,*) '';
+# define TESTPROGRAM(name)\
+PROGRAMNAME(name) \
+USE_ISO_FORTRAN \
+IMPLICIT_NONE \
+integer :: nfailures_all = 0; \
+integer :: nsuccess_all = 0; \
+write(output_unit,'("[==========] Running test cases from ", A)', advance='no') __FILE__ ; \
+call flush(output_unit);write(output_unit,*) '';
+# define PROGRAMNAME(name)\
 program name;
-# define USE_ISO_FORTRAN                                               \
+# define USE_ISO_FORTRAN \
 use, intrinsic :: iso_fortran_env;
-# define IMPLICIT_NONE                                                 \
+# define IMPLICIT_NONE \
 implicit none;
-# define TEST(case)                                                    \
-block;                                                                 \
-integer :: nfailures = 0;                                              \
-integer :: nsuccess = 0;                                               \
-real, allocatable :: tic_case, toc_case;                               \
-associate(testcase => case);                                           \
-write(*,'(A, A)') '[----------] Test ', testcase;                      \
-call flush(output_unit);                                               \
+# define TEST(case) \
+block; \
+integer :: nfailures = 0; \
+integer :: nsuccess = 0; \
+real, allocatable :: tic_case, toc_case; \
+character(:), allocatable :: testcase; \
+testcase = case; \
+write(output_unit,'("[----------] Test ", A)', advance='no') testcase; \
+call flush(output_unit);write(output_unit,*) ''; \
 block
-# define TEST_PRINT(msg)                                               \
-write(*,'(A, A)') '[          ] ', msg
-# define START_BLOCK(name)                                             \
-block;                                                                 \
-character(*), parameter :: testname = MACRO_STRINGIFY(name);           \
-real :: tic_assert, toc_assert;                                        \
-if(.not. allocated(tic_case)) then ;                                   \
-allocate(tic_case, toc_case);                                          \
-call cpu_time(tic_case);                                               \
-end if;                                                                \
+# define TEST_PRINT(msg) \
+write(*,'("[          ] ", A)', advance='no') msg; \
+call flush(output_unit);write(output_unit,*) '';
+# define START_BLOCK(name) \
+block; \
+character(*), parameter :: testname = MACRO_STRINGIFY(name); \
+real :: tic_assert, toc_assert; \
+if(.not. allocated(tic_case)) then ; \
+allocate(tic_case, toc_case); \
+call cpu_time(tic_case); \
+end if; \
 call cpu_time(tic_assert) ; \
-write(*,'(A, A, A, A, A, I3)') '[ RUN      ] ', testcase,'.', testname, ' at line ', __LINE__ ; \
-call flush(output_unit);
-# define END_BLOCK(expected, actual, fatal)                            \
-REPORT_SUCCESS                                                         \
-else;                                                                  \
-REPORT_FAILURE(expected, actual)                                       \
-if (fatal) stop 1;                                                     \
-end if ;                                                               \
+write(output_unit,'("[ RUN      ] ", A, ". ", A, " at line ", I3)', advance='no') testcase, testname, __LINE__ ; \
+call flush(output_unit);write(output_unit,*) '';
+# define END_BLOCK(expected, actual, fatal) \
+REPORT_SUCCESS \
+else; \
+REPORT_FAILURE(expected, actual) \
+if (fatal) stop 1; \
+end if ; \
 end block;
-# define END_TEST                                                      \
-call cpu_time(toc_case);                                               \
-write(*,'(A, I3, A, A)') '[----------] Ran ', nsuccess + nfailures, ' tests from ', testcase; \
-if(nfailures > 0) then;                                                \
-nfailures_all = nfailures_all + nfailures;                             \
-write(*,'(A, I3, A, A, A, E10.3, A)') ESCAPE//'[31m'//'[  FAILED  ]'//ESCAPE//'[0m ', nfailures, ' tests from ', testcase, '(', toc_case - tic_case, ' ms total)'; \
-else;                                                                  \
-nsuccess_all = nsuccess_all + nsuccess;                                \
-write(*,'(A, I3, A, A, A, E10.3, A)') ESCAPE//'[32m'//'[  PASSED  ]'//ESCAPE//'[0m ', nsuccess, ' tests from ', testcase, '(', toc_case - tic_case, ' ms total)'; \
-end if;                                                                \
-call flush(output_unit);                                               \
-end block;                                                             \
-end associate;                                                         \
+# define END_TEST \
+call cpu_time(toc_case); \
+write(output_unit,'("[----------] Ran ", I3, " tests from ", A)', advance='no') nsuccess + nfailures, testcase; \
+call flush(output_unit);write(output_unit,*) ''; \
+if(nfailures > 0) then; \
+nfailures_all = nfailures_all + nfailures; \
+write(output_unit,'(A, I3, " tests from ", A, " (", E10.3, " ms total)")', advance='no') ANSI_FAILED, nfailures, testcase, toc_case - tic_case; \
+else; \
+nsuccess_all = nsuccess_all + nsuccess; \
+write(output_unit,'(A, I3, " tests from ", A, " (", E10.3, " ms total)")', advance='no') ANSI_PASSED, nsuccess, testcase, toc_case - tic_case; \
+end if; \
+call flush(output_unit);write(output_unit,*) ''; \
+end block; \
+nsuccess = 0; nfailures = 0; \
 end block;
-# define END_TESTPROGRAM                                               \
-write(*,'(A, I3, A, A)') '[==========] Ran ', nsuccess_all + nfailures_all, ' tests from ', __FILE__; \
-if(nfailures_all > 0) then;                                            \
-write(*,'(A, I3, A, A, A)') ESCAPE//'[31m'//'[  FAILED  ]'//ESCAPE//'[0m ', nfailures_all, ' tests from ', __FILE__; \
-call flush(output_unit);                                               \
-stop 1;                                                                \
-else;                                                                  \
-write(*,'(A, I3, A, A, A)') ESCAPE//'[32m'//'[  PASSED  ]'//ESCAPE//'[0m ', nsuccess_all, ' tests from ', __FILE__; \
-call flush(output_unit);                                               \
-end if;                                                                \
+# define END_TESTPROGRAM \
+write(output_unit,'("[==========] Ran ", I3, " tests from ", A)', advance='no') nsuccess_all + nfailures_all, __FILE__; \
+call flush(output_unit);write(output_unit,*) ''; \
+if(nfailures_all > 0) then; \
+write(output_unit,'(A, I3, " tests from ", A)', advance='no') ANSI_FAILED, nfailures_all, __FILE__; \
+call flush(output_unit);write(output_unit,*) ''; \
+stop 1; \
+else; \
+write(output_unit,'(A, I3, " tests from ", A)', advance='no') ANSI_PASSED, nsuccess_all, __FILE__; \
+call flush(output_unit);write(output_unit,*) ''; \
+end if; \
 end program
 /**
   * Macros for testing booleans.
