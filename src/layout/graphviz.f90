@@ -185,10 +185,10 @@ module modules_layout_graphviz
             type(self_mods), allocatable :: smods(:)
 
             allocate(excludes_mods(0))
-            allocate(smods(size(model%packages)))
+            allocate(smods(merge(size(model%packages), 0, allocated(model%packages))))
 
             write(unit, '(A)') 'digraph modules {'
-            do i = 1, size(model%packages)
+            do i = 1, merge(size(model%packages), 0, allocated(model%packages))
                 associate(s => model%packages(i)%sources)
                     allocate(smods(i)%modules(0))
                     if (present(exclude)) then
@@ -236,7 +236,7 @@ module modules_layout_graphviz
                 end associate    
             end do
 
-            do i = 1, size(model%packages)
+            do i = 1, merge(size(model%packages), 0, allocated(model%packages))
                 if (present(exclude)) then; if (string_contains(exclude, model%packages(i)%name)) cycle; end if
                 associate(s => model%packages(i)%sources)
                     do j = 1, size(s)

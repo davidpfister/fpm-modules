@@ -26,7 +26,7 @@ cpp.suffixes = ["F90", "f90", "c"]
 cpp.macros = ["_FPM","_VERSION=\"'{version}'\""]
 
 [dependencies]
-fpm = {git = "https://github.com/fortran-lang/fpm", tag="v0.12.0"}
+fpm = {git = "https://github.com/fortran-lang/fpm", tag="v0.13.0"}
 
 [[test]]
 name = "test"

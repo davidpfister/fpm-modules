@@ -39,12 +39,19 @@ module modules_packages
         !private
         type(error_t), allocatable :: error
         character(:), allocatable :: filepath
+        logical :: exists
         
 
         if (present(file)) then
             filepath = file
         else
             filepath = 'fpm.toml'
+        end if
+
+        inquire(file=filepath, exist=exists)
+        if (.not. exists) then
+            error = error_t('Error: The file '//filepath//' cannot be found.')
+            call handle_error(error)
         end if
         call get_package_data(pack%package_config_t, filepath, error, apply_defaults=.true.)
         call handle_error(error)
@@ -61,7 +68,7 @@ module modules_packages
         integer :: i, j, k
 
         settings = fpm_build_settings(  &
-        &   profile=" ",&
+        &   profile="debug",&
         &   dump='fpm_model.toml',&
         &   prune= .false., &
         &   compiler=get_fpm_env("FC", "gfortran"), &
@@ -75,6 +82,7 @@ module modules_packages
         &   ldflag=" ", &
         &   list=.false.,&
         &   show_model=.false.,&
+        &   build_dir = 'build', &
         &   build_tests=.false.,&
         &   verbose=.false.)
 

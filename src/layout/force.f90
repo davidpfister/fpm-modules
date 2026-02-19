@@ -81,7 +81,7 @@ module modules_layout_force
 
             write(unit,'(A)', advance='no') "       var datastr = '{"
             write(unit,'(A)', advance='no') '"nodes": ['
-            do i = 1, size(model%packages)
+            do i = 1, merge(size(model%packages), 0, allocated(model%packages))
                 if (present(exclude)) then
                     if (string_contains(exclude, model%packages(i)%name)) then
                         do j = 1, size(model%packages(i)%sources)
@@ -112,7 +112,7 @@ module modules_layout_force
             end if
             write(unit,'(A)', advance='no') '],'
             write(unit,'(A)', advance='no') '"links": ['
-            do i = 1, size(model%packages)
+            do i = 1, merge(size(model%packages), 0, allocated(model%packages))
                 if (present(exclude)) then; if (string_contains(exclude, model%packages(i)%name)) cycle; end if
                 do j = 1, size(model%packages(i)%sources)
                     do k = 1, size(model%packages(i)%sources(j)%modules_provided)
