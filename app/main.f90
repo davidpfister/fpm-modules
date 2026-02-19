@@ -27,7 +27,7 @@ console(main)
 #if defined(_VERSION)
        character(*), parameter :: version = _VERSION
 #else
-       character(*), parameter :: version = '0.0.0'
+       character(*), parameter :: version = '1.3.0'
 #endif
 
         nargs = size(args)
