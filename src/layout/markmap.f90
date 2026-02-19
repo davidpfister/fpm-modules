@@ -85,7 +85,7 @@ module modules_layout_markmap
             integer :: i, j, k, s
 
             write(unit,'("          # " , A)') name // new_line('a')
-            do i = 1, size(model%packages)
+            do i = 1, merge(size(model%packages), 0, allocated(model%packages))
                 if (present(exclude)) then
                     if (.not. string_contains(exclude, model%packages(i)%name)) then
                         write(unit,'("          ## ", A)') model%packages(i)%name // new_line('a')

@@ -91,7 +91,7 @@ module modules_layout_mermaid
             allocate(excludes_mods(0))
 
             write(unit,'(*(A,/))') 'flowchart LR'
-            do i = 1, size(model%packages)
+            do i = 1, merge(size(model%packages), 0, allocated(model%packages))
                 associate(s => model%packages(i)%sources)
                     if (present(exclude)) then
                         if (string_contains(exclude, model%packages(i)%name)) then
@@ -117,7 +117,7 @@ module modules_layout_mermaid
                 if (len_trim(model%external_modules(j)%s) > 0) write(unit,'("        ", A)') model%external_modules(j)%s
             end do
             write(unit,'(A)') '    end'
-            do i = 1, size(model%packages)
+            do i = 1, merge(size(model%packages), 0, allocated(model%packages))
                 if (present(exclude)) then; if (string_contains(exclude, model%packages(i)%name)) cycle; end if
                 associate(s => model%packages(i)%sources)
                     do j = 1, size(s)

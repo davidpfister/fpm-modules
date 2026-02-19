@@ -21,7 +21,7 @@ module modules_submodules
 
         allocate(res(0))
 
-        do i = 1, size(model%packages)
+        do i = 1, merge(size(model%packages), 0, allocated(model%packages))
             do j = 1, size(model%packages(i)%sources)
                 if (merge(size(model%packages(i)%sources(j)%parent_modules), 0, allocated(model%packages(i)%sources(j)%parent_modules)) > 0) then
                     do k = 1, size(model%packages(i)%sources(j)%modules_provided)

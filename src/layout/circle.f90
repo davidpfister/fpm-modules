@@ -83,7 +83,7 @@ module modules_layout_circle
             write(unit,'(A)', advance='no') "       var datastr = '{"
             write(unit,'("""name"": """, A, """,")', advance='no') name
             write(unit,'(A)', advance='no') '"children": ['
-            do i = 1, size(model%packages)
+            do i = 1, merge(size(model%packages), 0, allocated(model%packages))
                 if (present(exclude)) then
                     if (.not. string_contains(exclude, model%packages(i)%name)) then
                         write(unit,'("{""name"": """, A ,""", ""children"": [")', advance='no') model%packages(i)%name
